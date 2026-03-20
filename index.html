@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VisionLar Imóveis | Encontre o Imóvel Perfeito</title>
+<meta name="description" content="VisionLar Imóveis — Especialistas em compra, venda e locação de imóveis no Brasil. Encontre casas, apartamentos, terrenos e imóveis comerciais.">
+<meta property="og:title" content="VisionLar Imóveis">
+<meta property="og:description" content="Encontre o imóvel dos seus sonhos com a VisionLar.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="container header-inner">
+    <a href="#" class="logo" onclick="showPage('home')">
+      <div class="logo-mark">V</div>
+      <div class="logo-text">
+        <span class="logo-name">VisionLar</span>
+        <span class="logo-tagline">Imóveis</span>
+      </div>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="#" onclick="showPage('home')" class="nav-link">Início</a>
+      <a href="#" onclick="showPage('list', {finalidade:'venda'})" class="nav-link">Comprar</a>
+      <a href="#" onclick="showPage('list', {finalidade:'aluguel'})" class="nav-link">Alugar</a>
+      <a href="#" onclick="showPage('about')" class="nav-link">Sobre</a>
+      <a href="#" onclick="showPage('contact')" class="nav-link">Contato</a>
+    </nav>
+    <div class="header-actions">
+      <a href="https://wa.me/5551997901012?text=Olá! Gostaria de mais informações sobre imóveis." target="_blank" class="btn btn-whatsapp">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </a>
+      <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- PAGES CONTAINER -->
+<main id="app">
+
+<!-- ===== HOME PAGE ===== -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-overlay"></div>
+      <div class="hero-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+      </div>
+    </div>
+    <div class="container hero-content">
+      <div class="hero-badge">🏡 Seu Próximo Lar Começa Aqui</div>
+      <h1 class="hero-title">Encontre o Imóvel<br><em>dos Seus Sonhos</em></h1>
+      <p class="hero-sub">Mais de 500 imóveis selecionados com exclusividade para você. Compra, venda e locação com total segurança e transparência.</p>
+      
+      <!-- SEARCH BOX -->
+      <div class="search-box">
+        <div class="search-tabs">
+          <button class="search-tab active" onclick="setFinalidade('venda', this)">Comprar</button>
+          <button class="search-tab" onclick="setFinalidade('aluguel', this)">Alugar</button>
+        </div>
+        <div class="search-fields">
+          <div class="sf">
+            <label>Tipo de Imóvel</label>
+            <select id="s-tipo">
+              <option value="">Todos os tipos</option>
+              <option value="casa">Casa</option>
+              <option value="apartamento">Apartamento</option>
+              <option value="terreno">Terreno</option>
+              <option value="comercial">Comercial</option>
+            </select>
+          </div>
+          <div class="sf">
+            <label>Bairro / Cidade</label>
+            <input type="text" id="s-local" placeholder="Ex: Porto Alegre, RS">
+          </div>
+          <div class="sf">
+            <label>Quartos</label>
+            <select id="s-quartos">
+              <option value="">Qualquer</option>
+              <option value="1">1+</option>
+              <option value="2">2+</option>
+              <option value="3">3+</option>
+              <option value="4">4+</option>
+            </select>
+          </div>
+          <div class="sf">
+            <label>Preço até</label>
+            <select id="s-preco">
+              <option value="">Qualquer</option>
+              <option value="300000">R$ 300 mil</option>
+              <option value="500000">R$ 500 mil</option>
+              <option value="800000">R$ 800 mil</option>
+              <option value="1200000">R$ 1,2 milhão</option>
+              <option value="2000000">R$ 2 milhões+</option>
+            </select>
+          </div>
+          <button class="btn btn-search" onclick="doSearch()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            Buscar
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="container stats-inner">
+        <div class="stat"><strong>500+</strong><span>Imóveis</span></div>
+        <div class="stat-sep"></div>
+        <div class="stat"><strong>12 anos</strong><span>de Experiência</span></div>
+        <div class="stat-sep"></div>
+        <div class="stat"><strong>1.800+</strong><span>Clientes Atendidos</span></div>
+        <div class="stat-sep"></div>
+        <div class="stat"><strong>98%</strong><span>de Satisfação</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DESTAQUES -->
+  <section class="section section-destaques">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Seleção Especial</div>
+        <h2 class="section-title">Imóveis em Destaque</h2>
+        <p>Oportunidades exclusivas selecionadas pela nossa equipe</p>
+      </div>
+      <div class="imoveis-grid" id="grid-destaques"></div>
+      <div class="section-footer">
+        <button class="btn btn-outline" onclick="showPage('list', {destaque: true})">Ver todos os destaques</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOVOS -->
+  <section class="section section-novos bg-light">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Recém Chegados</div>
+        <h2 class="section-title">Novos Imóveis</h2>
+        <p>Os últimos lançamentos do nosso portfólio</p>
+      </div>
+      <div class="imoveis-grid" id="grid-novos"></div>
+    </div>
+  </section>
+
+  <!-- CTA WHATSAPP -->
+  <section class="section cta-section">
+    <div class="container">
+      <div class="cta-box">
+        <div class="cta-content">
+          <div class="cta-icon">💬</div>
+          <h2>Não encontrou o que procura?</h2>
+          <p>Fale com nossos especialistas no WhatsApp e receba uma lista de imóveis personalizada para o seu perfil.</p>
+          <a href="https://wa.me/5551997901012?text=Olá! Gostaria de receber uma lista de imóveis personalizada." target="_blank" class="btn btn-whatsapp-lg">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Conversar no WhatsApp
+          </a>
+        </div>
+        <div class="cta-image">
+          <div class="cta-mockup">
+            <div class="mockup-phone">
+              <div class="mockup-screen">
+                <div class="mockup-msg">Olá! Vi um imóvel perfeito para você 🏠</div>
+                <div class="mockup-reply">Que ótimo! Me conta mais!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPORTUNIDADES -->
+  <section class="section bg-light">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Não Perca</div>
+        <h2 class="section-title">Oportunidades</h2>
+        <p>Imóveis com condições especiais de negociação</p>
+      </div>
+      <div class="imoveis-grid" id="grid-oportunidades"></div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section class="section section-como">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Simples e Seguro</div>
+        <h2 class="section-title">Como Funciona</h2>
+      </div>
+      <div class="steps-grid">
+        <div class="step"><div class="step-num">01</div><h3>Busque</h3><p>Use nossa busca avançada para encontrar imóveis com os filtros que mais importam para você.</p></div>
+        <div class="step"><div class="step-num">02</div><h3>Conheça</h3><p>Agende visitas e conheça os imóveis selecionados com nossos consultores especializados.</p></div>
+        <div class="step"><div class="step-num">03</div><h3>Negocie</h3><p>Nossa equipe cuida de toda a negociação e documentação para você ter segurança total.</p></div>
+        <div class="step"><div class="step-num">04</div><h3>Realize</h3><p>Receba as chaves do seu novo imóvel e viva o sonho que você tanto esperou.</p></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ===== LIST PAGE ===== -->
+<div id="page-list" class="page">
+  <div class="page-hero-sm">
+    <div class="container">
+      <h1 id="list-title">Imóveis Disponíveis</h1>
+      <p id="list-sub">Encontre o imóvel ideal para você</p>
+    </div>
+  </div>
+  <div class="container list-layout">
+    <!-- FILTERS SIDEBAR -->
+    <aside class="filters-sidebar" id="filtersSidebar">
+      <div class="filters-header">
+        <h3>Filtrar Imóveis</h3>
+        <button onclick="clearFilters()" class="clear-btn">Limpar</button>
+      </div>
+      <div class="filter-group">
+        <label>Finalidade</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="f-finalidade" value="venda" checked> Venda</label>
+          <label class="radio-label"><input type="radio" name="f-finalidade" value="aluguel"> Aluguel</label>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label>Tipo</label>
+        <select id="f-tipo" onchange="applyFilters()">
+          <option value="">Todos</option>
+          <option value="casa">Casa</option>
+          <option value="apartamento">Apartamento</option>
+          <option value="terreno">Terreno</option>
+          <option value="comercial">Comercial</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Cidade</label>
+        <select id="f-cidade" onchange="applyFilters()">
+          <option value="">Qualquer cidade</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Bairro</label>
+        <select id="f-bairro-filter" onchange="applyFilters()">
+          <option value="">Qualquer bairro</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Preço</label>
+        <div class="price-range">
+          <input type="number" id="f-preco-min" placeholder="Mínimo" oninput="applyFilters()">
+          <span>—</span>
+          <input type="number" id="f-preco-max" placeholder="Máximo" oninput="applyFilters()">
+        </div>
+      </div>
+      <div class="filter-group">
+        <label>Quartos (mínimo)</label>
+        <div class="btn-group">
+          <button class="btn-num active" onclick="setFilterNum('quartos',0,this)">Qualquer</button>
+          <button class="btn-num" onclick="setFilterNum('quartos',1,this)">1</button>
+          <button class="btn-num" onclick="setFilterNum('quartos',2,this)">2</button>
+          <button class="btn-num" onclick="setFilterNum('quartos',3,this)">3</button>
+          <button class="btn-num" onclick="setFilterNum('quartos',4,this)">4+</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label>Vagas (mínimo)</label>
+        <div class="btn-group">
+          <button class="btn-num active" onclick="setFilterNum('vagas',0,this)">Qualquer</button>
+          <button class="btn-num" onclick="setFilterNum('vagas',1,this)">1</button>
+          <button class="btn-num" onclick="setFilterNum('vagas',2,this)">2</button>
+          <button class="btn-num" onclick="setFilterNum('vagas',3,this)">3+</button>
+        </div>
+      </div>
+      <button class="btn btn-primary w-full mt-1" onclick="applyFilters()">Aplicar Filtros</button>
+    </aside>
+
+    <!-- RESULTS -->
+    <div class="list-results">
+      <div class="list-toolbar">
+        <span id="result-count">Carregando...</span>
+        <div class="sort-wrap">
+          <label>Ordenar:</label>
+          <select id="f-sort" onchange="applyFilters()">
+            <option value="recente">Mais recentes</option>
+            <option value="preco-asc">Menor preço</option>
+            <option value="preco-desc">Maior preço</option>
+          </select>
+        </div>
+        <button class="filter-toggle-btn" onclick="toggleFilters()">⚙ Filtros</button>
+      </div>
+      <div class="imoveis-grid" id="grid-list"></div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DETAIL PAGE ===== -->
+<div id="page-detail" class="page">
+  <div id="detail-content"></div>
+</div>
+
+<!-- ===== ABOUT PAGE ===== -->
+<div id="page-about" class="page">
+  <div class="page-hero-sm">
+    <div class="container">
+      <h1>Sobre a VisionLar</h1>
+      <p>Mais de 12 anos conectando pessoas aos imóveis certos</p>
+    </div>
+  </div>
+  <div class="container section">
+    <div class="about-grid">
+      <div class="about-text">
+        <div class="section-label">Nossa História</div>
+        <h2>Especialistas em Realizar Sonhos</h2>
+        <p>A VisionLar Imóveis nasceu da visão de que encontrar um imóvel deve ser uma experiência positiva, transparente e segura. Desde 2012, trabalhamos com dedicação total para conectar pessoas aos imóveis que realmente fazem a diferença na vida delas.</p>
+        <p>Nossa equipe é formada por corretores credenciados, com profundo conhecimento do mercado imobiliário local e nacional. Oferecemos atendimento personalizado do início ao fim, cuidando de cada detalhe da negociação e documentação.</p>
+        <div class="about-values">
+          <div class="value-item"><span class="value-icon">🎯</span><div><strong>Foco no Cliente</strong><p>Cada cliente é único. Entendemos suas necessidades e buscamos o imóvel ideal.</p></div></div>
+          <div class="value-item"><span class="value-icon">🔒</span><div><strong>Segurança Total</strong><p>Toda negociação com documentação verificada e processo transparente.</p></div></div>
+          <div class="value-item"><span class="value-icon">⭐</span><div><strong>Excelência</strong><p>Padrão premium de atendimento em todos os pontos de contato.</p></div></div>
+        </div>
+      </div>
+      <div class="about-image">
+        <div class="about-img-placeholder">
+          <div class="about-img-inner">
+            <div class="about-img-logo">V</div>
+            <p>VisionLar Imóveis</p>
+            <span>Desde 2012</span>
+          </div>
+        </div>
+        <div class="about-numbers">
+          <div class="about-num"><strong>500+</strong><span>Imóveis</span></div>
+          <div class="about-num"><strong>1.800+</strong><span>Clientes</span></div>
+          <div class="about-num"><strong>12 anos</strong><span>Mercado</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section bg-light">
+    <div class="container">
+      <div class="section-header"><h2 class="section-title">Nossa Equipe</h2></div>
+      <div class="team-grid">
+        <div class="team-card"><div class="team-avatar">MR</div><strong>Marcos Rodrigues</strong><span>Diretor Geral</span><a href="https://wa.me/5551997901012" target="_blank" class="team-wa">WhatsApp</a></div>
+        <div class="team-card"><div class="team-avatar">AC</div><strong>Ana Carvalho</strong><span>Corretora Sr.</span><a href="https://wa.me/5551997901012" target="_blank" class="team-wa">WhatsApp</a></div>
+        <div class="team-card"><div class="team-avatar">LS</div><strong>Lucas Silva</strong><span>Corretor</span><a href="https://wa.me/5551997901012" target="_blank" class="team-wa">WhatsApp</a></div>
+        <div class="team-card"><div class="team-avatar">PM</div><strong>Paula Mendes</strong><span>Corretora</span><a href="https://wa.me/5551997901012" target="_blank" class="team-wa">WhatsApp</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONTACT PAGE ===== -->
+<div id="page-contact" class="page">
+  <div class="page-hero-sm">
+    <div class="container">
+      <h1>Entre em Contato</h1>
+      <p>Nossa equipe está pronta para atender você</p>
+    </div>
+  </div>
+  <div class="container section">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h2>Fale Conosco</h2>
+        <p>Estamos disponíveis para tirar suas dúvidas, agendar visitas e ajudá-lo a encontrar o imóvel ideal.</p>
+        <div class="contact-item">
+          <div class="contact-icon">📱</div>
+          <div><strong>WhatsApp</strong><p>(51) 9 9790-1012</p></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📧</div>
+          <div><strong>E-mail</strong><p>contato@visionlarimoveis.com.br</p></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div><strong>Endereço</strong><p>Av. Principal, 1000 — Centro<br>Porto Alegre, RS</p></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🕐</div>
+          <div><strong>Horário</strong><p>Seg–Sex: 8h às 18h<br>Sáb: 9h às 13h</p></div>
+        </div>
+        <a href="https://wa.me/5551997901012" target="_blank" class="btn btn-whatsapp-lg mt-2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Chamar no WhatsApp
+        </a>
+      </div>
+      <div class="contact-form-wrap">
+        <h3>Envie uma Mensagem</h3>
+        <form class="contact-form" onsubmit="submitLead(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nome completo *</label>
+              <input type="text" name="nome" required placeholder="Seu nome">
+            </div>
+            <div class="form-group">
+              <label>Telefone / WhatsApp *</label>
+              <input type="tel" name="telefone" required placeholder="(51) 9 9790-1012">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>E-mail *</label>
+            <input type="email" name="email" required placeholder="seu@email.com">
+          </div>
+          <div class="form-group">
+            <label>Assunto</label>
+            <select name="assunto">
+              <option>Quero comprar um imóvel</option>
+              <option>Quero alugar um imóvel</option>
+              <option>Quero vender / anunciar</option>
+              <option>Outros</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Mensagem</label>
+            <textarea name="mensagem" rows="4" placeholder="Descreva o que você procura..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary w-full">Enviar Mensagem</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PAGE ===== -->
+<div id="page-admin" class="page">
+  <div class="page-hero-sm">
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+      <div>
+        <h1>Área Administrativa</h1>
+        <p>Gerenciamento de imóveis e leads</p>
+      </div>
+      <button onclick="doLogout()" style="padding:10px 20px;background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Sair da conta</button>
+    </div>
+  </div>
+  <div class="container section">
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="showAdminTab('imoveis',this)">Imóveis</button>
+      <button class="admin-tab" onclick="showAdminTab('leads',this)">Leads</button>
+      <button class="admin-tab" onclick="showAdminTab('novo',this)">+ Novo Imóvel</button>
+    </div>
+    <div id="admin-imoveis" class="admin-panel active">
+      <div class="admin-toolbar">
+        <input type="text" id="admin-search" placeholder="Buscar imóvel..." oninput="renderAdminList()">
+      </div>
+      <div id="admin-list"></div>
+    </div>
+    <div id="admin-leads" class="admin-panel">
+      <div id="leads-list"></div>
+    </div>
+    <div id="admin-novo" class="admin-panel">
+      <form class="imovel-form" onsubmit="saveImovel(event)">
+        <input type="hidden" id="edit-id">
+        <div class="form-row">
+          <div class="form-group"><label>Título *</label><input type="text" id="f-titulo" required placeholder="Ex: Apartamento 3 quartos Moinhos de Vento"></div>
+          <div class="form-group"><label>Código</label><input type="text" id="f-codigo" placeholder="VL001"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Tipo *</label>
+            <select id="f-tipo-form">
+              <option value="">Carregando...</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Finalidade *</label>
+            <select id="f-finalidade-form"><option value="venda">Venda</option><option value="aluguel">Aluguel</option></select>
+          </div>
+          <div class="form-group"><label>Preço (R$) *</label><input type="number" id="f-preco-form" required placeholder="450000"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Cidade</label>
+            <select id="f-cidade-form"><option value="">Selecione a cidade</option></select>
+          </div>
+          <div class="form-group"><label>Bairro</label><input type="text" id="f-bairro" placeholder="Moinhos de Vento"></div>
+          <div class="form-group"><label>CEP</label><input type="text" id="f-cep" placeholder="90000-000"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Quartos</label><input type="number" id="f-quartos-form" min="0" value="0"></div>
+          <div class="form-group"><label>Banheiros</label><input type="number" id="f-banheiros" min="0" value="0"></div>
+          <div class="form-group"><label>Vagas</label><input type="number" id="f-vagas-form" min="0" value="0"></div>
+          <div class="form-group"><label>Área (m²)</label><input type="number" id="f-area" min="0" value="0"></div>
+        </div>
+        <div class="form-group"><label>Descrição</label><textarea id="f-descricao" rows="4" placeholder="Descreva o imóvel..."></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label><input type="checkbox" id="f-destaque"> Imóvel em Destaque</label></div>
+          <div class="form-group"><label><input type="checkbox" id="f-oportunidade"> Oportunidade</label></div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Salvar Imóvel</button>
+          <button type="button" class="btn btn-outline" onclick="resetForm()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="logo-mark">V</div>
+          <div class="logo-text"><span class="logo-name">VisionLar</span><span class="logo-tagline">Imóveis</span></div>
+        </div>
+        <p>Conectando pessoas aos imóveis certos desde 2012. Compra, venda e locação com total segurança e transparência.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-link" title="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="#" class="social-link" title="Facebook">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Imóveis</h4>
+        <a href="#" onclick="showPage('list',{finalidade:'venda'})">Imóveis à Venda</a>
+        <a href="#" onclick="showPage('list',{finalidade:'aluguel'})">Imóveis para Alugar</a>
+        <a href="#" onclick="showPage('list',{tipo:'apartamento'})">Apartamentos</a>
+        <a href="#" onclick="showPage('list',{tipo:'casa'})">Casas</a>
+        <a href="#" onclick="showPage('list',{tipo:'terreno'})">Terrenos</a>
+        <a href="#" onclick="showPage('list',{tipo:'comercial'})">Comerciais</a>
+      </div>
+      <div class="footer-col">
+        <h4>Empresa</h4>
+        <a href="#" onclick="showPage('about')">Sobre Nós</a>
+        <a href="#" onclick="showPage('contact')">Contato</a>
+        <a href="#" onclick="showPage('admin')">Área Admin</a>
+        <a href="#" onclick="showPage('privacidade')">Política de Privacidade</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <p>📱 (51) 9 9790-1012</p>
+        <p>📧 contato@visionlarimoveis.com.br</p>
+        <p>📍 Porto Alegre, RS</p>
+        <a href="https://wa.me/5551997901012" target="_blank" class="btn btn-whatsapp mt-1">WhatsApp</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 VisionLar Imóveis. Todos os direitos reservados.</p>
+      <p>CRECI: 99.999-F</p>
+    </div>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/5551997901012?text=Olá! Vim do site e gostaria de informações sobre imóveis." target="_blank" class="whatsapp-float" title="Fale conosco no WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span class="wa-tooltip">Fale conosco!</span>
+</a>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+
+<!-- LOGIN MODAL -->
+<div id="login-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
+  <div style="background:#fff;border-radius:16px;padding:40px;width:100%;max-width:380px;margin:20px">
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="width:52px;height:52px;background:#0D2B45;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-family:Georgia,serif;font-size:28px;font-weight:700;color:#C9A84C">V</div>
+      <h2 style="font-family:Georgia,serif;color:#0D2B45;margin-bottom:4px">Área Administrativa</h2>
+      <p style="font-size:13px;color:#7A7A7A">Entre com suas credenciais</p>
+    </div>
+    <form onsubmit="doLogin(event)">
+      <div style="margin-bottom:14px">
+        <label style="font-size:11px;font-weight:700;letter-spacing:1px;color:#7A7A7A;text-transform:uppercase;display:block;margin-bottom:6px">E-mail</label>
+        <input id="login-email" type="email" required placeholder="seu@email.com" style="width:100%;padding:11px 14px;border:1.5px solid #E0DBD0;border-radius:8px;font-size:14px;outline:none;font-family:inherit">
+      </div>
+      <div style="margin-bottom:20px">
+        <label style="font-size:11px;font-weight:700;letter-spacing:1px;color:#7A7A7A;text-transform:uppercase;display:block;margin-bottom:6px">Senha</label>
+        <input id="login-pass" type="password" required placeholder="••••••••" style="width:100%;padding:11px 14px;border:1.5px solid #E0DBD0;border-radius:8px;font-size:14px;outline:none;font-family:inherit">
+      </div>
+      <button type="submit" style="width:100%;padding:13px;background:#0D2B45;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">Entrar</button>
+      <button type="button" onclick="hideLoginModal()" style="width:100%;padding:10px;margin-top:10px;background:none;border:none;color:#7A7A7A;font-size:14px;cursor:pointer">Cancelar</button>
+    </form>
+  </div>
+</div>
+<script src="app-supabase.js"></script>
+</body>
+</html>
