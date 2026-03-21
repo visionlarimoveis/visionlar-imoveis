@@ -117,8 +117,8 @@ export default function ImovelPage() {
     <>
       <div className="min-h-screen bg-gray-50">
         {/* NAV */}
-        <nav className="bg-[#0D2137] h-14 px-6 flex items-center justify-between sticky top-0 z-40 shadow-lg">
-          <Link href="/site/imoveis"><Image src="/logo.png" alt="VisionLar" width={110} height={40} className="object-contain"/></Link>
+        <nav className="bg-[#0D2137] px-6 flex items-center justify-between sticky top-0 z-40 shadow-lg" style={{height:"70px"}}>
+          <Link href="/site/imoveis"><Image src="/logo.png" alt="VisionLar" width={150} height={54} className="object-contain"/></Link>
           <div className="hidden md:flex gap-4">
             <Link href="/site/imoveis" className="text-white/60 hover:text-[#D4A843] text-xs font-medium">← Imóveis</Link>
           </div>

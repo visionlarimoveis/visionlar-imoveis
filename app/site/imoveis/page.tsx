@@ -231,8 +231,8 @@ export default function ImoveisHomePage() {
   return (
     <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">
       {/* NAV */}
-      <nav className="bg-[#0D2137] h-14 px-6 flex items-center justify-between shrink-0 shadow-lg z-50">
-        <Link href="/site/imoveis"><Image src="/logo.png" alt="VisionLar" width={120} height={44} className="object-contain"/></Link>
+      <nav className="bg-[#0D2137] px-6 flex items-center justify-between shrink-0 shadow-lg z-50" style={{height:"70px"}}>
+        <Link href="/site/imoveis"><Image src="/logo.png" alt="VisionLar" width={150} height={54} className="object-contain"/></Link>
         <div className="hidden md:flex gap-1">
           {[['Imóveis','/site/imoveis'],['Institucional','/site/institucional'],['Contato','/site/contato']].map(([l,h])=>(
             <Link key={l} href={h} className="text-white/65 hover:text-white hover:bg-white/10 px-4 py-1.5 rounded-lg text-sm font-medium transition-all">{l}</Link>
