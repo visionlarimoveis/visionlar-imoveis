@@ -28,10 +28,10 @@ export default async function InstitucionalPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* NAV */}
-      <nav className="bg-[#0D2137] sticky top-0 z-50 shadow-lg">
-        <div className="px-6 flex items-center justify-between" style={{ height: '70px' }}>
+      <nav className="bg-[#0D2137] sticky top-0 z-50 shadow-lg" style={{overflow:"hidden"}}>
+        <div className="px-6 flex items-center justify-between" style={{height:"64px"}}>
           <Link href="/site/imoveis" className="flex items-center">
-            <Image src="/logo.png" alt="VisionLar" width={150} height={54} className="object-contain" />
+            <Image src="/logo.png" alt="VisionLar" width={140} height={48} className="object-contain" style={{maxHeight:"52px"}} />
           </Link>
           <div className="hidden md:flex gap-1">
             {[['Imóveis','/site/imoveis'],['Institucional','/site/institucional'],['Contato','/site/contato']].map(([l,h])=>(

@@ -136,9 +136,9 @@ export default function ImoveisHomePage() {
   const mapRef = useRef<any>(null)
   const mapInstanceRef = useRef<any>(null)
   const markersRef = useRef<any[]>([])
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  const [finalidade, setFinalidade] = useState('')
+  const [finalidade, setFinalidade] = useState('Venda')
   const [tiposSel, setTiposSel] = useState<string[]>([])
   const [bairrosSel, setBairrosSel] = useState<string[]>([])
   const [cidadesSel, setCidadesSel] = useState<string[]>([])
