@@ -14,6 +14,8 @@ async function getImoveisCount() {
 }
 
 export default async function SitePage() {
+  const imoveisCount = await getImoveisCount()
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* NAV */}
