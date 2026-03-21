@@ -547,9 +547,23 @@ export default function BuscaImoveisPage() {
                 {selected.banhs?<div className="text-center"><div className="text-sm font-bold">{selected.banhs}</div><div className="text-[9px] text-gray-400">Banhs</div></div>:null}
                 {selected.vagas?<div className="text-center"><div className="text-sm font-bold">{selected.vagas}</div><div className="text-[9px] text-gray-400">Vagas</div></div>:null}
               </div>
-              {selected.descricao&&<p className="text-xs text-gray-500 leading-relaxed mb-4">{selected.descricao}</p>}
+              {selected.codigo&&<div className="inline-block bg-[#0D2137] text-white text-[10px] font-bold px-3 py-1 rounded-full mb-2">Código: {selected.codigo}</div>}
+              {selected.descricao&&<p className="text-xs text-gray-500 leading-relaxed mb-3">{selected.descricao}</p>}
+              {selected.comodidades?.length>0&&(
+                <div className="mb-4">
+                  <h4 className="text-xs font-bold text-gray-700 mb-2">Comodidades</h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {(selected.comodidades as string[]).map((cm:string)=>(
+                      <span key={cm} className="text-[10px] bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full border border-emerald-100 flex items-center gap-1">
+                        <svg width="8" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#059669" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        {cm}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="flex gap-2">
-                <a href={`https://wa.me/${WPP}?text=${encodeURIComponent(`Olá! Tenho interesse: ${selected.titulo}`)}`} target="_blank" rel="noopener"
+                <a href={`https://wa.me/${WPP}?text=${encodeURIComponent(`Olá! Tenho interesse no imóvel${selected.codigo ? ' código ' + selected.codigo : ''}: ${selected.titulo} — ${selected.cidade?.nome || ''}`)}`} target="_blank" rel="noopener"
                   className="flex-1 bg-green-500 text-white text-xs font-bold py-2.5 rounded-xl text-center hover:bg-green-600 transition-colors">
                   📲 Falar pelo WhatsApp
                 </a>
@@ -655,7 +669,7 @@ function CardImovel({ im, idx, onSelect }: { im: any; idx: number; onSelect: (i:
             </div>
             {/* Botão WhatsApp */}
             <a
-              href={`https://wa.me/${WPP}?text=${encodeURIComponent(`Tenho interesse: ${im.titulo} — ${im.bairro?.nome || ''}, ${im.cidade?.nome}`)}`}
+              href={`https://wa.me/${WPP}?text=${encodeURIComponent(`Olá! Tenho interesse no imóvel${im.codigo ? ' código ' + im.codigo : ''}: ${im.titulo} — ${im.bairro?.nome ? im.bairro.nome + ', ' : ''}${im.cidade?.nome || ''}`)}`}
               target="_blank"
               rel="noopener"
               onClick={e => e.stopPropagation()}

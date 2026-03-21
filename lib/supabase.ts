@@ -38,6 +38,7 @@ export type Corretor = {
 
 export type Imovel = {
   id: string
+  codigo?: string
   titulo: string
   tipo: string
   finalidade: 'Venda' | 'Aluguel'
@@ -54,6 +55,7 @@ export type Imovel = {
   descricao?: string
   foto_url?: string
   fotos?: string[]
+  comodidades?: string[]
   status: 'Ativo' | 'Inativo' | 'Vendido' | 'Alugado'
   destaque: boolean
   corretor_id?: string
