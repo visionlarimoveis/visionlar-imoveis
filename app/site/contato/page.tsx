@@ -30,7 +30,7 @@ function Nav() {
     <nav className="bg-[#0D2137] sticky top-0 z-50 shadow-lg">
       <div className="px-6 flex items-center justify-between" style={{ height: "64px", overflow: "hidden" }}>
         <Link href="/site/imoveis" className="flex items-center">
-          <Image src="/logo.png" alt="VisionLar" width={140} height={48} className="object-contain" style={{maxHeight:"52px"}} style={{ display: 'block' }} />
+          <Image src="/logo.png" alt="VisionLar" width={140} height={48} className="object-contain" style={{maxHeight:"52px", display:"block"}} />
         </Link>
         <div className="hidden md:flex gap-1">
           {[['Imóveis','/site/imoveis'],['Institucional','/site/institucional'],['Contato','/site/contato']].map(([l,h])=>(
