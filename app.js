@@ -1,1 +1,0 @@
-/* VISIONLAR — app placeholder */

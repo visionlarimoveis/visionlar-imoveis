@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy: #0D2137;
+  --gold: #B8892A;
+  --gold2: #D4A843;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #C5CEDB; border-radius: 3px; }
+
+/* Gold gradient text */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #B8892A, #ECC96A);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Gold button */
+.btn-gold {
+  background: linear-gradient(135deg, #B8892A, #D4A843);
+  color: #0D2137;
+  font-weight: 700;
+  transition: all 0.15s;
+  box-shadow: 0 2px 8px rgba(184,137,42,0.3);
+}
+.btn-gold:hover {
+  box-shadow: 0 4px 16px rgba(184,137,42,0.45);
+  transform: translateY(-1px);
+}
+
+/* Badge variants */
+.badge-venda  { @apply bg-indigo-50 text-indigo-700 text-xs font-bold px-2 py-0.5 rounded-full; }
+.badge-aluguel { @apply bg-emerald-50 text-emerald-700 text-xs font-bold px-2 py-0.5 rounded-full; }
+.badge-ativo  { @apply bg-emerald-50 text-emerald-700 text-xs font-bold px-2 py-0.5 rounded-full; }
+.badge-inativo { @apply bg-gray-100 text-gray-500 text-xs font-bold px-2 py-0.5 rounded-full; }
+.badge-lead   { @apply bg-amber-50 text-amber-800 text-xs font-bold px-2 py-0.5 rounded-full; }
+.badge-neg    { @apply bg-yellow-50 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded-full; }
+.badge-fech   { @apply bg-emerald-50 text-emerald-700 text-xs font-bold px-2 py-0.5 rounded-full; }
+.badge-perd   { @apply bg-red-50 text-red-700 text-xs font-bold px-2 py-0.5 rounded-full; }
