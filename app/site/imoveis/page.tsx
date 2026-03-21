@@ -1,6 +1,5 @@
 'use client'
-import { useEffect, useState, useCallback, useRef } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useEffect, useState, useCallback, useRef, Suspense } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
@@ -181,7 +180,6 @@ function LocalizacaoDropdown({
 }
 
 export default function BuscaImoveisPage() {
-  const searchParams = useSearchParams()
   const [imoveis, setImoveis] = useState<any[]>([])
   const [filtered, setFiltered] = useState<any[]>([])
   const [cidades, setCidades] = useState<any[]>([])
@@ -195,20 +193,11 @@ export default function BuscaImoveisPage() {
   const mapInstanceRef = useRef<any>(null)
   const markersRef = useRef<any[]>([])
 
-  // Filtros — inicializados a partir dos params da URL
-  const [finalidade, setFinalidade] = useState(() => searchParams?.get('finalidade') || '')
-  const [tiposSel, setTiposSel] = useState<string[]>(() => {
-    const t = searchParams?.get('tipos')
-    return t ? t.split(',').filter(Boolean) : []
-  })
-  const [bairrosSel, setBairrosSel] = useState<string[]>(() => {
-    const b = searchParams?.get('bairros')
-    return b ? b.split(',').filter(Boolean) : []
-  })
-  const [cidadesSel, setCidadesSel] = useState<string[]>(() => {
-    const ci = searchParams?.get('cidades')
-    return ci ? ci.split(',').filter(Boolean) : []
-  })
+  // Filtros — inicializados a partir dos params da URL via window.location
+  const [finalidade, setFinalidade] = useState('')
+  const [tiposSel, setTiposSel] = useState<string[]>([])
+  const [bairrosSel, setBairrosSel] = useState<string[]>([])
+  const [cidadesSel, setCidadesSel] = useState<string[]>([])
   const [precoMin, setPrecoMin] = useState('')
   const [precoMax, setPrecoMax] = useState('')
   const [dorms, setDorms] = useState('')
@@ -216,6 +205,20 @@ export default function BuscaImoveisPage() {
   const [areaMin, setAreaMin] = useState('')
   const [ordenar, setOrdenar] = useState('recente')
   const [filtrosAbertos, setFiltrosAbertos] = useState(true)
+
+  // Lê params da URL no client após mount
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams(window.location.search)
+    const fin = params.get('finalidade')
+    const tipos = params.get('tipos')
+    const cidades = params.get('cidades')  
+    const bairros = params.get('bairros')
+    if (fin) setFinalidade(fin)
+    if (tipos) setTiposSel(tipos.split(',').filter(Boolean))
+    if (cidades) setCidadesSel(cidades.split(',').filter(Boolean))
+    if (bairros) setBairrosSel(bairros.split(',').filter(Boolean))
+  }, [])
 
   const load = useCallback(async () => {
     setLoading(true)
