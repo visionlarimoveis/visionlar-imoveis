@@ -511,7 +511,7 @@ export default function BuscaImoveisPage() {
                 </div>
                 {filtered.map((im, idx) => (
                   <div key={im.id} onClick={() => setSelected(im)}
-                    className={`flex gap-2.5 p-3 border-b border-gray-100 cursor-pointer hover:bg-amber-50 transition-colors ${selected?.id===im.id?'bg-amber-50 border-l-2 border-l-[#B8892A]':''}`}>
+                    className={`flex gap-2.5 p-3 border-b border-gray-100 cursor-pointer hover:bg-amber-50 transition-colors ${selected?.id===im.id?'bg-amber-50 border-l-2 border-l-[#B8892A]':''}`} onClick={() => window.location.href=`/site/imoveis/${im.id}`}>
                     <img src={im.foto_url||FOTOS[idx%FOTOS.length]} alt={im.titulo} className="w-16 h-12 object-cover rounded-lg shrink-0" />
                     <div className="min-w-0">
                       <div className="text-xs font-bold text-gray-900 truncate">{im.titulo}</div>
@@ -582,7 +582,7 @@ function CardImovel({ im, idx, onSelect }: { im: any; idx: number; onSelect: (i:
   return (
     <div
       className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer group"
-      onClick={() => onSelect(im)}
+      onClick={() => window.location.href = `/site/imoveis/${im.id}`}
     >
       {/* FOTO com carousel dots decorativos */}
       <div className="relative h-48 overflow-hidden bg-gray-100">
