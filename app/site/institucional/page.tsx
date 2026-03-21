@@ -67,7 +67,6 @@ export default async function InstitucionalPage() {
               <div className="bg-white/10 border border-white/20 rounded-2xl px-6 py-5 text-center shrink-0">
                 <div className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-1">CRECI-RS</div>
                 <div className="text-[#D4A843] font-bold text-2xl" style={{fontFamily:'Playfair Display,serif'}}>{cfg.creci}</div>
-                <div className="text-white/40 text-[10px] mt-1">Registro Profissional</div>
               </div>
             )}
           </div>

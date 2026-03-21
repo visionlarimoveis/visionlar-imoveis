@@ -231,7 +231,7 @@ export default function ImoveisHomePage() {
   return (
     <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">
       {/* NAV */}
-      <nav className="bg-[#0D2137] px-6 flex items-center justify-between shrink-0 shadow-lg z-50" style={{height:"70px"}}>
+      <nav className="bg-[#0D2137] px-6 flex items-center justify-between shrink-0 shadow-lg z-50" style={{height:"64px", overflow:"hidden"}}>
         <Link href="/site/imoveis"><Image src="/logo.png" alt="VisionLar" width={150} height={54} className="object-contain"/></Link>
         <div className="hidden md:flex gap-1">
           {[['Imóveis','/site/imoveis'],['Institucional','/site/institucional'],['Contato','/site/contato']].map(([l,h])=>(
@@ -256,8 +256,8 @@ export default function ImoveisHomePage() {
           <div className="w-px h-6 bg-gray-200 shrink-0"/>
           {/* 1. TRANSAÇÃO */}
           <div className="flex gap-1 shrink-0">
-            {[['','Todos'],['Venda','Comprar'],['Aluguel','Alugar']].map(([val,label])=>(
-              <button key={val} onClick={() => setFinalidade(val)}
+            {[['Venda','Comprar'],['Aluguel','Alugar']].map(([val,label])=>(
+              <button key={val} onClick={() => setFinalidade(val === finalidade ? '' : val)}
                 className={`h-10 px-4 rounded-xl text-sm font-semibold border transition-all ${finalidade===val?'bg-[#0D2137] text-white border-[#0D2137]':'bg-white text-gray-600 border-gray-200 hover:border-gray-400'}`}>
                 {label}
               </button>
