@@ -25,3 +25,8 @@ insert into configuracoes (chave, valor) values
   ('endereco', ''),
   ('sobre', 'A VisionLar Imóveis é uma empresa especializada em intermediação imobiliária, com foco em proporcionar uma experiência segura, transparente e eficiente para quem deseja comprar ou vender imóveis.')
 on conflict (chave) do nothing;
+
+-- Adicionar senha_adm se não existir
+insert into configuracoes (chave, valor) values
+  ('senha_adm', 'visionlar2025')
+on conflict (chave) do nothing;

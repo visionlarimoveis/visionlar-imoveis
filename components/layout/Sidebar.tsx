@@ -76,16 +76,25 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* User */}
+      {/* User + Logout */}
       <div className="p-3 border-t border-white/[0.07]">
-        <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-white/[0.06] cursor-pointer transition-colors">
+        <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-white/[0.06] transition-colors">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#B8892A] to-[#D4A843] flex items-center justify-center text-[#0D2137] text-xs font-bold shrink-0">
             VL
           </div>
-          <div>
+          <div className="flex-1 min-w-0">
             <div className="text-white text-xs font-500">Administrador</div>
             <div className="text-white/35 text-[10px]">VisionLar Imóveis</div>
           </div>
+          <button
+            onClick={() => { sessionStorage.removeItem('adm_auth'); window.location.href = '/site' }}
+            className="text-white/25 hover:text-red-400 transition-colors text-[10px] shrink-0"
+            title="Sair"
+          >
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+            </svg>
+          </button>
         </div>
       </div>
     </aside>

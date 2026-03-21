@@ -11,6 +11,7 @@ type Config = {
   cidade_sede: string
   endereco: string
   sobre: string
+  senha_adm: string
 }
 
 const defaults: Config = {
@@ -22,6 +23,7 @@ const defaults: Config = {
   cidade_sede: 'Candelária - RS',
   endereco: '',
   sobre: 'A VisionLar Imóveis é uma empresa especializada em intermediação imobiliária.',
+  senha_adm: 'visionlar2025',
 }
 
 export default function ConfigPage() {
@@ -211,7 +213,8 @@ export default function ConfigPage() {
               ['NEXT_PUBLIC_SUPABASE_URL', 'https://sgrsjmizmwbsotamfsbw.supabase.co'],
               ['NEXT_PUBLIC_SUPABASE_ANON_KEY', 'sb_publishable_K-1zVIoMQ0GTbi...'],
               ['NEXT_PUBLIC_WHATSAPP', '5551997901012'],
-            ].map(([key, val]) => (
+              { key: 'senha_adm', label: '🔐 Senha do Painel Adm', placeholder: 'Ex: minha_senha_segura' },
+  ].map(([key, val]) => (
               <div key={key} className="flex items-center gap-3 bg-gray-50 rounded-lg px-4 py-2.5">
                 <code className="text-[10px] font-bold text-[#B8892A] min-w-[260px]">{key}</code>
                 <code className="text-[10px] text-gray-400 truncate">{val}</code>

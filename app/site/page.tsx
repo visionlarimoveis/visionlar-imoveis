@@ -178,7 +178,7 @@ export default async function SitePage() {
           <div className="flex items-center gap-4">
             <span>CRECI-RS 00000-J</span>
             <a
-              href="/dashboard"
+              href="/adm"
               className="text-white/15 hover:text-white/50 transition-colors text-[10px] border border-white/10 px-2.5 py-1 rounded-lg hover:border-white/25"
               title="Área administrativa"
             >
