@@ -510,7 +510,7 @@ export default function BuscaImoveisPage() {
                   <p className="text-xs font-bold text-gray-700">{filtered.length} imóveis no mapa</p>
                 </div>
                 {filtered.map((im, idx) => (
-                  <div key={im.id} onClick={() => setSelected(im)}
+                  <div key={im.id}
                     className={`flex gap-2.5 p-3 border-b border-gray-100 cursor-pointer hover:bg-amber-50 transition-colors ${selected?.id===im.id?'bg-amber-50 border-l-2 border-l-[#B8892A]':''}`} onClick={() => window.location.href=`/site/imoveis/${im.id}`}>
                     <img src={im.foto_url||FOTOS[idx%FOTOS.length]} alt={im.titulo} className="w-16 h-12 object-cover rounded-lg shrink-0" />
                     <div className="min-w-0">
