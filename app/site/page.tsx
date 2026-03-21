@@ -5,15 +5,29 @@ import Link from 'next/link'
 const WPP = process.env.NEXT_PUBLIC_WHATSAPP || '5551997901012'
 
 async function getImoveisCount() {
-  const { count } = await supabase
-    .from('imoveis')
-    .select('id', { count: 'exact', head: true })
-    .eq('status', 'Ativo')
-  return count || 0
+  try {
+    const { count } = await supabase
+      .from('imoveis')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'Ativo')
+    return count || 0
+  } catch {
+    return 0
+  }
+}
+
+async function getCreci() {
+  try {
+    const { data } = await supabase.from('configuracoes').select('valor').eq('chave', 'creci').single()
+    return data?.valor || ''
+  } catch {
+    return ''
+  }
 }
 
 export default async function SitePage() {
   const imoveisCount = await getImoveisCount()
+  const creci = await getCreci()
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -59,7 +73,7 @@ export default async function SitePage() {
 
         {/* Stats */}
         <div className="flex justify-center gap-16 mt-10 pt-8 border-t border-white/[0.08]">
-          {[[imoveisCount.toString(), 'Imóveis Disponíveis'],['8+','Anos de Experiência'],['500+','Clientes Satisfeitos'],['98%','Índice de Aprovação']].map(([n,l]) => (
+          {[[imoveisCount.toString(), 'Imóveis Disponíveis'],['100%','Dedicação Total'],['✓','Negociação Transparente'],['🤝','Atendimento Personalizado']].map(([n,l]) => (
             <div key={l} className="text-center">
               <div className="font-playfair text-3xl font-bold text-white">{n}</div>
               <div className="text-white/40 text-[10px] mt-1">{l}</div>
@@ -176,7 +190,7 @@ export default async function SitePage() {
         <div className="border-t border-white/[0.08] pt-4 flex justify-between items-center text-white/20 text-[10px]">
           <span>© 2025 VisionLar Imóveis. Todos os direitos reservados.</span>
           <div className="flex items-center gap-4">
-            <span>CRECI-RS 00000-J</span>
+            <span>CRECI-RS {creci || '00000-J'}</span>
             <a
               href="/adm"
               className="text-white/15 hover:text-white/50 transition-colors text-[10px] border border-white/10 px-2.5 py-1 rounded-lg hover:border-white/25"

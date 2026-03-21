@@ -7,11 +7,12 @@ import { supabase } from '@/lib/supabase'
 
 const WPP = process.env.NEXT_PUBLIC_WHATSAPP || '5551997901012'
 const FOTOS_DEMO = [
-  'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&q=85',
+  'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1200&q=90',
   'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=85',
   'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&q=85',
   'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=85',
   'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=85',
+  'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=85',
 ]
 
 function fmtPreco(p: number) {
@@ -31,9 +32,9 @@ export default function ImovelPage() {
   const [imovel, setImovel] = useState<any>(null)
   const [similares, setSimilares] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [fotoIdx, setFotoIdx] = useState(0)
   const [galeria, setGaleria] = useState<string[]>([])
-  const [galeriaOpen, setGaleriaOpen] = useState(false)
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null)
+  const [showMapa, setShowMapa] = useState(false)
 
   useEffect(() => {
     if (!id) return
@@ -48,15 +49,12 @@ export default function ImovelPage() {
       if (!data) { router.push('/site/imoveis'); return }
       setImovel(data)
 
-      // Monta galeria: foto principal + fotos adicionais
       const fotos: string[] = []
       if (data.foto_url) fotos.push(data.foto_url)
       if (data.fotos?.length) fotos.push(...data.fotos)
-      // Preenche com demos se necessário
-      while (fotos.length < 4) fotos.push(FOTOS_DEMO[fotos.length % FOTOS_DEMO.length])
+      while (fotos.length < 6) fotos.push(FOTOS_DEMO[fotos.length % FOTOS_DEMO.length])
       setGaleria(fotos)
 
-      // Similares: mesmo tipo e cidade, excluindo o atual
       const { data: sim } = await supabase
         .from('imoveis')
         .select('*, cidade:cidades(nome,estado), bairro:bairros(nome)')
@@ -65,22 +63,23 @@ export default function ImovelPage() {
         .eq('cidade_id', data.cidade_id)
         .neq('id', id)
         .limit(4)
-
       setSimilares(sim || [])
       setLoading(false)
     }
     load()
   }, [id, router])
 
+  // Teclado para lightbox
   useEffect(() => {
+    if (lightboxIdx === null) return
     const fn = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') setFotoIdx(i => Math.max(0, i - 1))
-      if (e.key === 'ArrowRight') setFotoIdx(i => Math.min(galeria.length - 1, i + 1))
-      if (e.key === 'Escape') setGaleriaOpen(false)
+      if (e.key === 'ArrowLeft') setLightboxIdx(i => i !== null ? Math.max(0, i - 1) : null)
+      if (e.key === 'ArrowRight') setLightboxIdx(i => i !== null ? Math.min(galeria.length - 1, i + 1) : null)
+      if (e.key === 'Escape') setLightboxIdx(null)
     }
     window.addEventListener('keydown', fn)
     return () => window.removeEventListener('keydown', fn)
-  }, [galeria.length])
+  }, [lightboxIdx, galeria.length])
 
   if (loading) return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -90,7 +89,6 @@ export default function ImovelPage() {
       </div>
     </div>
   )
-
   if (!imovel) return null
 
   const wppMsg = `Olá! Vi o imóvel${imovel.codigo ? ` código ${imovel.codigo}` : ''}: ${imovel.titulo} — ${imovel.cidade?.nome || ''} e gostaria de mais informações. Aguardo seu contato.`
@@ -103,7 +101,7 @@ export default function ImovelPage() {
     imovel.banhs && { label: 'Banheiros', value: imovel.banhs, icon: '🚿' },
     imovel.vagas && { label: 'Vagas', value: imovel.vagas, icon: '🚗' },
     imovel.condominio > 0 && { label: 'Condomínio', value: `R$ ${imovel.condominio?.toLocaleString('pt-BR')}/mês`, icon: '🏢' },
-  ].filter(Boolean) as { label: string; value: any; icon: string }[]
+  ].filter(Boolean) as any[]
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -112,9 +110,9 @@ export default function ImovelPage() {
         <Link href="/site">
           <Image src="/logo.png" alt="VisionLar" width={110} height={40} className="object-contain" />
         </Link>
-        <div className="hidden md:flex gap-6 items-center">
+        <div className="hidden md:flex gap-6">
           <Link href="/site" className="text-white/60 hover:text-[#D4A843] text-xs font-medium transition-colors">Home</Link>
-          <Link href="/site/imoveis" className="text-white/60 hover:text-[#D4A843] text-xs font-medium transition-colors">← Voltar aos imóveis</Link>
+          <Link href="/site/imoveis" className="text-white/60 hover:text-[#D4A843] text-xs font-medium transition-colors">← Imóveis</Link>
         </div>
         <a href={wppLink} target="_blank" rel="noopener"
           className="bg-[#B8892A] text-[#0D2137] px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#D4A843] transition-colors">
@@ -129,49 +127,76 @@ export default function ImovelPage() {
           <span>›</span>
           <Link href="/site/imoveis" className="hover:text-[#B8892A]">Imóveis</Link>
           <span>›</span>
-          <span className="text-gray-700 font-medium truncate max-w-[200px]">{imovel.titulo}</span>
-          {imovel.codigo && <span className="ml-2 bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-mono text-[10px]">Cód. {imovel.codigo}</span>}
+          <span className="text-gray-700 font-medium truncate max-w-xs">{imovel.titulo}</span>
+          {imovel.codigo && <span className="ml-1 bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-mono text-[10px]">Cód. {imovel.codigo}</span>}
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-6">
-        {/* GALERIA DE FOTOS */}
-        <div className="grid grid-cols-2 gap-2 rounded-2xl overflow-hidden mb-6 h-[420px]">
-          {/* Foto principal grande */}
-          <div className="relative cursor-pointer group" onClick={() => { setFotoIdx(0); setGaleriaOpen(true) }}>
-            <img
-              src={galeria[0]}
-              alt={imovel.titulo}
-              className="w-full h-full object-cover group-hover:brightness-90 transition-all"
-              onError={e => { (e.target as any).src = FOTOS_DEMO[0] }}
-            />
-            <div className="absolute bottom-3 left-3 flex gap-2">
-              <button
-                onClick={e => { e.stopPropagation(); setFotoIdx(0); setGaleriaOpen(true) }}
-                className="bg-black/60 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 hover:bg-black/80 transition-colors"
-              >
-                🖼️ Fotos ({galeria.length})
-              </button>
-            </div>
-          </div>
+      <div className="max-w-6xl mx-auto px-6 py-5">
 
-          {/* Mini galeria 2x2 */}
-          <div className="grid grid-rows-2 gap-2">
-            {galeria.slice(1, 3).map((foto, i) => (
-              <div key={i} className="relative cursor-pointer group" onClick={() => { setFotoIdx(i + 1); setGaleriaOpen(true) }}>
+        {/* ============================================================
+            GALERIA ESTILO IMIGRANTE
+            1 foto grande esquerda + grid 1x3 direita
+        ============================================================ */}
+        <div className="relative rounded-2xl overflow-hidden mb-6" style={{ height: '520px' }}>
+          <div className="grid h-full" style={{ gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
+
+            {/* FOTO PRINCIPAL GRANDE */}
+            <div
+              className="relative overflow-hidden cursor-pointer group bg-gray-200"
+              style={{ gridRow: '1 / span 3' }}
+              onClick={() => setLightboxIdx(0)}
+            >
+              <img
+                src={galeria[0]}
+                alt={imovel.titulo}
+                className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                onError={e => { (e.target as any).src = FOTOS_DEMO[0] }}
+              />
+              {/* Botões sobre a foto principal */}
+              <div className="absolute bottom-4 left-4 flex gap-2">
+                <button
+                  onClick={e => { e.stopPropagation(); setLightboxIdx(0) }}
+                  className="bg-black/65 backdrop-blur-sm text-white text-xs font-semibold px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-black/80 transition-colors"
+                >
+                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                  Fotos ({galeria.length})
+                </button>
+                <button
+                  onClick={e => { e.stopPropagation(); setShowMapa(m => !m) }}
+                  className="bg-black/65 backdrop-blur-sm text-white text-xs font-semibold px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-black/80 transition-colors"
+                >
+                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  Mapa
+                </button>
+              </div>
+            </div>
+
+            {/* 3 FOTOS PEQUENAS DIREITA */}
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="relative overflow-hidden cursor-pointer group bg-gray-200"
+                onClick={() => setLightboxIdx(i)}
+              >
                 <img
-                  src={foto}
-                  alt={`Foto ${i + 2}`}
-                  className="w-full h-full object-cover group-hover:brightness-90 transition-all"
-                  onError={e => { (e.target as any).src = FOTOS_DEMO[i + 1] }}
+                  src={galeria[i] || FOTOS_DEMO[i]}
+                  alt={`Foto ${i + 1}`}
+                  className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                  onError={e => { (e.target as any).src = FOTOS_DEMO[i % FOTOS_DEMO.length] }}
                 />
-                {/* Ver mais na última foto */}
-                {i === 1 && galeria.length > 3 && (
+                {/* Overlay "+ Ver mais" na última foto */}
+                {i === 3 && galeria.length > 4 && (
                   <div
-                    className="absolute inset-0 bg-black/50 flex items-center justify-center cursor-pointer hover:bg-black/60 transition-colors"
-                    onClick={() => { setFotoIdx(3); setGaleriaOpen(true) }}
+                    className="absolute inset-0 bg-black/55 flex items-center justify-center cursor-pointer hover:bg-black/65 transition-colors"
+                    onClick={() => setLightboxIdx(3)}
                   >
-                    <span className="text-white font-bold text-sm">+ Ver mais</span>
+                    <span className="text-white font-bold text-lg">+ Ver mais</span>
                   </div>
                 )}
               </div>
@@ -179,43 +204,66 @@ export default function ImovelPage() {
           </div>
         </div>
 
+        {/* MAPA INLINE */}
+        {showMapa && (
+          <div className="mb-6 rounded-2xl overflow-hidden border border-gray-200 shadow-sm" style={{ height: '300px' }}>
+            <iframe
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(`${imovel.bairro?.nome || ''}, ${imovel.cidade?.nome} - ${imovel.cidade?.estado}`)}&output=embed`}
+              width="100%"
+              height="300"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
+        )}
+
         <div className="grid grid-cols-[1fr,340px] gap-6">
           {/* COLUNA ESQUERDA */}
           <div>
-            {/* Header do imóvel */}
+            {/* Header */}
             <div className="bg-white rounded-2xl p-5 mb-4 border border-gray-100 shadow-sm">
-              <div className="flex items-start justify-between mb-1">
-                <div>
-                  <h1 className="text-xl font-bold text-gray-900">{imovel.titulo}</h1>
-                  <div className="text-sm text-gray-500 mt-0.5">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1">
+                  <h1 className="text-xl font-bold text-gray-900 leading-snug">{imovel.titulo}</h1>
+                  <div className="text-sm text-gray-500 mt-1 flex items-center gap-1">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="shrink-0">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+                    </svg>
                     {imovel.bairro?.nome && `${imovel.bairro.nome} — `}{imovel.cidade?.nome} - {imovel.cidade?.estado}
                   </div>
                 </div>
-                {imovel.codigo && (
-                  <span className="bg-[#0D2137] text-white text-[10px] font-bold px-3 py-1.5 rounded-full shrink-0 ml-3">
-                    Código {imovel.codigo}
-                  </span>
-                )}
-              </div>
-              {imovel.destaque && (
-                <span className="inline-block mt-2 bg-amber-100 text-amber-800 text-[10px] font-bold px-3 py-1 rounded-full">⭐ Destaque</span>
-              )}
-              <div className="mt-3 pt-3 border-t border-gray-100">
-                <div className="text-xs text-gray-500 font-medium">{imovel.finalidade === 'Venda' ? 'Comprar' : 'Alugar'}</div>
-                <div className="font-bold text-3xl text-gray-900 mt-0.5" style={{ fontFamily: 'Playfair Display, serif' }}>
-                  {fmtPreco(imovel.preco)}
-                  {imovel.finalidade === 'Aluguel' && <span className="text-base text-gray-400 font-normal">/mês</span>}
+                <div className="flex flex-col items-end gap-1.5 shrink-0">
+                  {imovel.codigo && (
+                    <span className="bg-[#0D2137] text-white text-[10px] font-bold px-3 py-1.5 rounded-full">
+                      Código {imovel.codigo}
+                    </span>
+                  )}
+                  {imovel.destaque && (
+                    <span className="bg-amber-100 text-amber-800 text-[10px] font-bold px-3 py-1 rounded-full">⭐ Destaque</span>
+                  )}
                 </div>
+              </div>
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <div className="text-xs text-gray-500 font-medium mb-1">{imovel.finalidade === 'Venda' ? 'Comprar' : 'Alugar'}</div>
+                <div className="font-bold text-4xl text-gray-900" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  {fmtPreco(imovel.preco)}
+                  {imovel.finalidade === 'Aluguel' && <span className="text-lg text-gray-400 font-normal">/mês</span>}
+                </div>
+                {imovel.condominio > 0 && (
+                  <div className="text-xs text-gray-400 mt-1">+ Condomínio: R$ {imovel.condominio?.toLocaleString('pt-BR')}/mês</div>
+                )}
               </div>
             </div>
 
             {/* Especificações */}
             {specs.length > 0 && (
               <div className="bg-white rounded-2xl p-5 mb-4 border border-gray-100 shadow-sm">
-                <div className="grid grid-cols-3 gap-4">
-                  {specs.map(s => (
-                    <div key={s.label} className="text-center p-3 bg-gray-50 rounded-xl">
-                      <div className="text-xl mb-1">{s.icon}</div>
+                <h2 className="font-bold text-gray-900 mb-4 text-sm">Características</h2>
+                <div className="grid grid-cols-3 gap-3">
+                  {specs.map((s: any) => (
+                    <div key={s.label} className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-xl text-center">
+                      <div className="text-2xl mb-1.5">{s.icon}</div>
                       <div className="font-bold text-gray-900 text-sm">{s.value}</div>
                       <div className="text-[10px] text-gray-400 mt-0.5">{s.label}</div>
                     </div>
@@ -236,13 +284,14 @@ export default function ImovelPage() {
             {imovel.comodidades?.length > 0 && (
               <div className="bg-white rounded-2xl p-5 mb-4 border border-gray-100 shadow-sm">
                 <h2 className="font-bold text-gray-900 mb-4">Comodidades do imóvel</h2>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-y-2 gap-x-4">
                   {imovel.comodidades.map((c: string) => (
                     <div key={c} className="flex items-center gap-2 text-sm text-gray-700">
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
-                        <circle cx="7" cy="7" r="7" fill="#ECFDF5"/>
-                        <path d="M4 7L6 9L10 5" stroke="#059669" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
+                      <div className="w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center shrink-0">
+                        <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                          <path d="M1 4L3.5 6.5L9 1" stroke="#059669" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
                       {c}
                     </div>
                   ))}
@@ -251,57 +300,50 @@ export default function ImovelPage() {
             )}
           </div>
 
-          {/* COLUNA DIREITA — Contato fixo */}
+          {/* COLUNA DIREITA — Contato sticky */}
           <div className="space-y-4">
-            {/* Card de contato */}
             <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm sticky top-20">
               <h3 className="font-bold text-gray-900 mb-1 text-sm">Interessado neste imóvel?</h3>
-              <p className="text-xs text-gray-400 mb-4">Entre em contato com nossa equipe.</p>
+              <p className="text-xs text-gray-400 mb-4">Entre em contato pelo WhatsApp agora.</p>
 
-              {/* Mensagem pré-preenchida */}
               <div className="bg-gray-50 rounded-xl p-3 mb-4 border border-gray-200">
-                <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Mensagem</div>
+                <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Mensagem</div>
                 <p className="text-xs text-gray-700 leading-relaxed">{wppMsg}</p>
               </div>
 
-              <a
-                href={wppLink}
-                target="_blank"
-                rel="noopener"
-                className="w-full bg-green-500 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 hover:bg-green-600 transition-colors shadow-md hover:shadow-lg"
-              >
-                <svg width="16" height="16" fill="white" viewBox="0 0 24 24">
+              <a href={wppLink} target="_blank" rel="noopener"
+                className="w-full bg-green-500 text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 hover:bg-green-600 transition-colors shadow-md hover:shadow-lg">
+                <svg width="18" height="18" fill="white" viewBox="0 0 24 24">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/>
                   <path d="M12 2C6.477 2 2 6.484 2 12.017c0 1.867.486 3.622 1.338 5.147L2 22l4.975-1.302A10 10 0 0012 22c5.523 0 10-4.487 10-10C22 6.48 17.522 2 12 2z"/>
                 </svg>
                 Enviar pelo WhatsApp
               </a>
 
-              {/* Corretor */}
               {imovel.corretor && (
                 <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-[#0D2137] text-white flex items-center justify-center font-bold text-sm shrink-0">
-                    {imovel.corretor.nome.split(' ').slice(0, 2).map((n: string) => n[0]).join('')}
+                    {imovel.corretor.nome.split(' ').slice(0,2).map((n: string) => n[0]).join('')}
                   </div>
-                  <div>
-                    <div className="text-xs text-gray-400">Corretor responsável</div>
+                  <div className="flex-1">
+                    <div className="text-[10px] text-gray-400">Corretor responsável</div>
                     <div className="text-sm font-bold text-gray-900">{imovel.corretor.nome}</div>
                     {imovel.corretor.creci && <div className="text-[10px] text-gray-400">CRECI: {imovel.corretor.creci}</div>}
                   </div>
                   {imovel.corretor.telefone && (
-                    <a
-                      href={`https://wa.me/55${imovel.corretor.telefone.replace(/\D/g,'')}`}
+                    <a href={`https://wa.me/55${imovel.corretor.telefone.replace(/\D/g,'')}`}
                       target="_blank" rel="noopener"
-                      className="ml-auto bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors shrink-0"
-                    >
-                      <svg width="14" height="14" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 2C6.477 2 2 6.484 2 12.017c0 1.867.486 3.622 1.338 5.147L2 22l4.975-1.302A10 10 0 0012 22c5.523 0 10-4.487 10-10C22 6.48 17.522 2 12 2z"/></svg>
+                      className="bg-green-500 text-white w-9 h-9 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors shrink-0">
+                      <svg width="16" height="16" fill="white" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/>
+                        <path d="M12 2C6.477 2 2 6.484 2 12.017c0 1.867.486 3.622 1.338 5.147L2 22l4.975-1.302A10 10 0 0012 22c5.523 0 10-4.487 10-10C22 6.48 17.522 2 12 2z"/>
+                      </svg>
                     </a>
                   )}
                 </div>
               )}
             </div>
 
-            {/* Info adicional */}
             <div className="bg-[#0D2137] rounded-2xl p-4 text-center">
               <div className="text-white/60 text-xs mb-2">Tem um imóvel para vender?</div>
               <a href={`https://wa.me/${WPP}?text=${encodeURIComponent('Olá! Gostaria de anunciar meu imóvel com a VisionLar.')}`}
@@ -315,7 +357,7 @@ export default function ImovelPage() {
 
         {/* IMÓVEIS SIMILARES */}
         {similares.length > 0 && (
-          <div className="mt-8">
+          <div className="mt-10">
             <h2 className="font-bold text-xl text-[#0D2137] mb-5" style={{ fontFamily: 'Playfair Display, serif' }}>
               Imóveis <span className="text-[#B8892A]">similares</span>
             </h2>
@@ -327,9 +369,7 @@ export default function ImovelPage() {
                     <img src={s.foto_url || FOTOS_DEMO[idx % FOTOS_DEMO.length]} alt={s.titulo}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       onError={e => { (e.target as any).src = FOTOS_DEMO[0] }} />
-                    <div className="absolute top-2 left-2">
-                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${s.finalidade==='Venda'?'bg-indigo-600 text-white':'bg-emerald-600 text-white'}`}>{s.finalidade}</span>
-                    </div>
+                    <span className={`absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full ${s.finalidade==='Venda'?'bg-indigo-600 text-white':'bg-emerald-600 text-white'}`}>{s.finalidade}</span>
                   </div>
                   <div className="p-3">
                     <div className="text-[10px] text-gray-400">{s.tipo}</div>
@@ -354,53 +394,55 @@ export default function ImovelPage() {
         )}
       </div>
 
-      {/* LIGHTBOX - Galeria full screen */}
-      {galeriaOpen && (
-        <div className="fixed inset-0 bg-black/95 z-[300] flex items-center justify-center" onClick={() => setGaleriaOpen(false)}>
-          <button onClick={() => setGaleriaOpen(false)} className="absolute top-4 right-4 text-white/60 hover:text-white text-2xl z-10">✕</button>
-
-          {/* Foto principal */}
-          <div className="relative w-full max-w-4xl px-16" onClick={e => e.stopPropagation()}>
-            <img
-              src={galeria[fotoIdx]}
-              alt={`Foto ${fotoIdx + 1}`}
-              className="w-full max-h-[75vh] object-contain rounded-xl"
-              onError={e => { (e.target as any).src = FOTOS_DEMO[0] }}
-            />
-            <div className="absolute top-1/2 -translate-y-1/2 left-2">
-              <button
-                onClick={() => setFotoIdx(i => Math.max(0, i - 1))}
-                disabled={fotoIdx === 0}
-                className="bg-white/20 hover:bg-white/40 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors disabled:opacity-30"
-              >‹</button>
-            </div>
-            <div className="absolute top-1/2 -translate-y-1/2 right-2">
-              <button
-                onClick={() => setFotoIdx(i => Math.min(galeria.length - 1, i + 1))}
-                disabled={fotoIdx === galeria.length - 1}
-                className="bg-white/20 hover:bg-white/40 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors disabled:opacity-30"
-              >›</button>
+      {/* ============================================================
+          LIGHTBOX FULLSCREEN
+      ============================================================ */}
+      {lightboxIdx !== null && (
+        <div className="fixed inset-0 bg-black/97 z-[300] flex flex-col" onClick={() => setLightboxIdx(null)}>
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-4 shrink-0" onClick={e => e.stopPropagation()}>
+            <div className="text-white/60 text-sm">{imovel.titulo}</div>
+            <div className="flex items-center gap-4">
+              <span className="text-white/40 text-sm">{lightboxIdx + 1} / {galeria.length}</span>
+              <button onClick={() => setLightboxIdx(null)} className="text-white/50 hover:text-white text-2xl leading-none">✕</button>
             </div>
           </div>
 
+          {/* Foto central */}
+          <div className="flex-1 flex items-center justify-center relative px-16" onClick={e => e.stopPropagation()}>
+            <button
+              onClick={() => setLightboxIdx(i => i !== null ? Math.max(0, i - 1) : null)}
+              disabled={lightboxIdx === 0}
+              className="absolute left-4 bg-white/15 hover:bg-white/30 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl transition-colors disabled:opacity-20"
+            >‹</button>
+
+            <img
+              src={galeria[lightboxIdx]}
+              alt={`Foto ${lightboxIdx + 1}`}
+              className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl"
+              onError={e => { (e.target as any).src = FOTOS_DEMO[0] }}
+            />
+
+            <button
+              onClick={() => setLightboxIdx(i => i !== null ? Math.min(galeria.length - 1, i + 1) : null)}
+              disabled={lightboxIdx === galeria.length - 1}
+              className="absolute right-4 bg-white/15 hover:bg-white/30 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl transition-colors disabled:opacity-20"
+            >›</button>
+          </div>
+
           {/* Thumbnails */}
-          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 px-4" onClick={e => e.stopPropagation()}>
+          <div className="flex justify-center gap-2 px-4 py-4 shrink-0 overflow-x-auto" onClick={e => e.stopPropagation()}>
             {galeria.map((foto, i) => (
-              <img
-                key={i}
-                src={foto}
-                alt={`Thumb ${i+1}`}
-                onClick={() => setFotoIdx(i)}
-                className={`w-14 h-10 object-cover rounded-lg cursor-pointer transition-all ${fotoIdx === i ? 'ring-2 ring-[#B8892A] opacity-100' : 'opacity-50 hover:opacity-80'}`}
+              <img key={i} src={foto} alt={`Thumb ${i+1}`}
+                onClick={() => setLightboxIdx(i)}
+                className={`w-16 h-12 object-cover rounded-lg cursor-pointer shrink-0 transition-all ${lightboxIdx === i ? 'ring-2 ring-[#B8892A] opacity-100 scale-110' : 'opacity-45 hover:opacity-70'}`}
                 onError={e => { (e.target as any).src = FOTOS_DEMO[0] }}
               />
             ))}
-            <div className="text-white/50 text-xs self-center ml-2">{fotoIdx + 1} / {galeria.length}</div>
           </div>
         </div>
       )}
 
-      {/* Footer simples */}
       <footer className="bg-[#0D2137] mt-12 py-6 px-6 text-center">
         <div className="text-white/25 text-xs">© 2025 VisionLar Imóveis. Todos os direitos reservados.</div>
       </footer>
