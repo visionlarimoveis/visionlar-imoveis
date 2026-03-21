@@ -33,7 +33,7 @@ export default async function SitePage() {
         </div>
         <ul className="hidden md:flex gap-7 list-none">
           {['Início','Sobre','Serviços','Imóveis','Contato'].map(l => (
-            <li key={l}><a href={`#${l.toLowerCase()}`} className="text-white/60 hover:text-[#D4A843] text-[13px] font-medium transition-colors no-underline">{l}</a></li>
+            <li key={l}><a href={h} className="text-white/60 hover:text-[#D4A843] text-[13px] font-medium transition-colors no-underline">{l}</a></li>
           ))}
         </ul>
         <a href={`https://wa.me/${WPP}?text=${encodeURIComponent('Olá! Vim pelo site da VisionLar Imóveis.')}`} target="_blank" rel="noopener" className="bg-[#B8892A] text-[#0D2137] px-4 py-2 rounded-lg text-xs font-bold hover:bg-[#D4A843] transition-colors no-underline flex items-center gap-1.5">
