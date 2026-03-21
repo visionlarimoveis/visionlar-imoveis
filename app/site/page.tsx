@@ -1,28 +1,19 @@
 import { supabase } from '@/lib/supabase'
 import Image from 'next/image'
 import Link from 'next/link'
-
-async function getImoveis() {
-  const { data } = await supabase
-    .from('imoveis')
-    .select('*, cidade:cidades(nome,estado), bairro:bairros(nome)')
-    .eq('status', 'Ativo')
-    .order('destaque', { ascending: false })
-    .order('created_at', { ascending: false })
-  return data || []
-}
-
-function fmtP(p: number) {
-  if (p >= 1e6) return `R$ ${(p / 1e6).toFixed(1).replace('.', ',')}M`
-  if (p >= 1e3) return `R$ ${(p / 1e3).toFixed(0)}k`
-  return `R$ ${p.toLocaleString('pt-BR')}`
-}
+import HeroBusca from '@/components/ui/HeroBusca'
 
 const WPP = process.env.NEXT_PUBLIC_WHATSAPP || '5551997901012'
 
-export default async function SitePage() {
-  const imoveis = await getImoveis()
+async function getImoveisCount() {
+  const { count } = await supabase
+    .from('imoveis')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'Ativo')
+  return count || 0
+}
 
+export default async function SitePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* NAV */}
@@ -51,17 +42,14 @@ export default async function SitePage() {
         </h1>
         <p className="text-white/50 text-sm max-w-md mx-auto mb-10">Especialistas em intermediação imobiliária com atendimento personalizado e resultados reais.</p>
 
-        {/* Busca hero */}
-        <div className="bg-white rounded-2xl p-5 max-w-3xl mx-auto grid grid-cols-4 gap-3 items-end shadow-2xl">
-          <div><label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider block mb-1.5">O que busca?</label><select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none bg-gray-50"><option>Comprar ou Alugar</option><option>Comprar</option><option>Alugar</option></select></div>
-          <div><label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider block mb-1.5">Tipo</label><select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none bg-gray-50"><option>Todos os tipos</option><option>Apartamento</option><option>Casa</option><option>Terreno</option><option>Comercial</option></select></div>
-          <div><label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider block mb-1.5">Cidade / Bairro</label><input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none bg-gray-50" placeholder="Ex: Candelária, Centro..." /></div>
-          <button className="btn-gold text-xs py-2.5 px-4 rounded-xl whitespace-nowrap">🔍 Buscar</button>
+        {/* Busca hero — filtros reais com redirect */}
+        <div className="max-w-4xl mx-auto w-full px-4">
+          <HeroBusca />
         </div>
 
         {/* Stats */}
         <div className="flex justify-center gap-16 mt-10 pt-8 border-t border-white/[0.08]">
-          {[[imoveis.length.toString(), 'Imóveis Disponíveis'],['8+','Anos de Experiência'],['500+','Clientes Satisfeitos'],['98%','Índice de Aprovação']].map(([n,l]) => (
+          {[[imoveisCount.toString(), 'Imóveis Disponíveis'],['8+','Anos de Experiência'],['500+','Clientes Satisfeitos'],['98%','Índice de Aprovação']].map(([n,l]) => (
             <div key={l} className="text-center">
               <div className="font-playfair text-3xl font-bold text-white">{n}</div>
               <div className="text-white/40 text-[10px] mt-1">{l}</div>
@@ -87,48 +75,47 @@ export default async function SitePage() {
         </div>
       </section>
 
-      {/* IMÓVEIS */}
-      <section id="imóveis" className="py-14 px-10">
-        <div className="flex items-end justify-between mb-7">
-          <div>
-            <h2 className="font-playfair text-3xl text-[#0D2137]">Nossos <span className="text-[#B8892A]">Imóveis</span></h2>
-            <p className="text-gray-400 text-sm mt-1">Encontre o imóvel ideal para você</p>
+      {/* CTA VER TODOS IMÓVEIS */}
+      <section className="py-12 px-10 bg-white text-center">
+        <h2 className="font-playfair text-3xl text-[#0D2137] mb-3">
+          Nossos <span className="text-[#B8892A]">Imóveis</span>
+        </h2>
+        <p className="text-gray-400 text-sm mb-8 max-w-md mx-auto">
+          Explore nossa carteira completa com filtros avançados, mapa interativo e busca por cidade e bairro.
+        </p>
+        <a
+          href="/site/imoveis"
+          className="inline-flex items-center gap-3 bg-[#0D2137] text-white px-10 py-4 rounded-2xl text-sm font-bold hover:bg-[#1A3558] transition-all hover:-translate-y-1 hover:shadow-xl shadow-lg"
+        >
+          <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          </svg>
+          Ver todos os imóveis
+          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <div className="flex justify-center gap-8 mt-8">
+          <div className="text-center">
+            <div className="font-playfair text-2xl font-bold text-[#0D2137]">🏠</div>
+            <div className="text-xs text-gray-400 mt-1">Comprar</div>
+          </div>
+          <div className="text-center">
+            <div className="font-playfair text-2xl font-bold text-[#0D2137]">🔑</div>
+            <div className="text-xs text-gray-400 mt-1">Alugar</div>
+          </div>
+          <div className="text-center">
+            <div className="font-playfair text-2xl font-bold text-[#0D2137]">🗺️</div>
+            <div className="text-xs text-gray-400 mt-1">Ver no Mapa</div>
+          </div>
+          <div className="text-center">
+            <div className="font-playfair text-2xl font-bold text-[#0D2137]">⚡</div>
+            <div className="text-xs text-gray-400 mt-1">Filtros avançados</div>
           </div>
         </div>
-        {imoveis.length === 0 ? (
-          <div className="text-center py-16 text-gray-400"><div className="text-4xl mb-3">🏠</div><p>Nenhum imóvel disponível no momento.</p></div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {imoveis.map((i: any, idx: number) => (
-              <div key={i.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer">
-                <div className="relative h-48 overflow-hidden bg-gray-100">
-                  <img src={i.foto_url || 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80'} alt={i.titulo} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
-                  <div className="absolute top-2 left-2">
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${i.finalidade === 'Venda' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700'}`}>{i.finalidade}</span>
-                  </div>
-                  {i.destaque && <div className="absolute top-2 right-2 bg-[#B8892A] text-[#0D2137] text-[9px] font-black px-2 py-0.5 rounded-full">★ DESTAQUE</div>}
-                </div>
-                <div className="p-4">
-                  <div className="font-playfair text-xl font-bold text-gray-900">{fmtP(i.preco)}{i.finalidade === 'Aluguel' && <small className="text-xs text-gray-400 font-normal font-poppins">/mês</small>}</div>
-                  <div className="text-xs font-semibold text-gray-800 mt-1 truncate">{i.titulo}</div>
-                  <div className="text-[10px] text-gray-400 mt-0.5">📍 {i.bairro?.nome ? `${i.bairro.nome}, ` : ''}{i.cidade?.nome}</div>
-                  <div className="flex gap-2 mt-2.5 pt-2.5 border-t border-gray-100 flex-wrap">
-                    {i.area ? <span className="text-[10px] text-gray-500">📐 <b>{i.area}</b>m²</span> : null}
-                    {i.dorms ? <span className="text-[10px] text-gray-500">🛏 <b>{i.dorms}</b></span> : null}
-                    {i.banhs ? <span className="text-[10px] text-gray-500">🚿 <b>{i.banhs}</b></span> : null}
-                    {i.vagas ? <span className="text-[10px] text-gray-500">🚗 <b>{i.vagas}</b></span> : null}
-                  </div>
-                  <div className="flex gap-2 mt-3">
-                    <a href={`https://wa.me/${WPP}?text=${encodeURIComponent(`Tenho interesse no imóvel: ${i.titulo} — ${i.cidade?.nome}`)}`} target="_blank" rel="noopener" className="flex-1 bg-green-500 text-white text-[10px] font-bold py-2 rounded-lg text-center hover:bg-green-600 transition-colors no-underline">📲 WhatsApp</a>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </section>
 
-      {/* SOBRE */}
+            {/* SOBRE */}
       <section id="sobre" className="bg-[#0D2137] py-16 px-10">
         <div className="max-w-2xl">
           <h2 className="font-playfair text-3xl text-white mb-1">Sobre a <span className="text-[#D4A843]">VisionLar Imóveis</span></h2>
@@ -147,9 +134,9 @@ export default async function SitePage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-gradient-to-r from-[#B8892A] to-[#A57820] py-16 px-10 text-center">
+      <section className="bg-white py-16 px-10 text-center border-t border-gray-100">
         <h2 className="font-playfair text-3xl text-[#0D2137] mb-3">Pronto para vender ou encontrar<br/>seu imóvel ideal?</h2>
-        <p className="text-[#0D2137]/60 text-sm mb-7">Fale agora com nossa equipe e descubra como podemos ajudá-lo.</p>
+        <p className="text-gray-500 text-sm mb-7">Fale agora com nossa equipe e descubra como podemos ajudá-lo.</p>
         <div className="flex gap-3 justify-center flex-wrap">
           <a href={`https://wa.me/${WPP}?text=${encodeURIComponent('Olá! Quero falar com um especialista da VisionLar.')}`} target="_blank" rel="noopener" className="bg-[#0D2137] text-white px-7 py-3 rounded-xl text-sm font-bold hover:bg-[#132844] transition-colors no-underline flex items-center gap-2">📲 Falar no WhatsApp agora</a>
           <a href={`https://wa.me/${WPP}?text=${encodeURIComponent('Olá! Gostaria de uma avaliação gratuita do meu imóvel.')}`} target="_blank" rel="noopener" className="border-2 border-[#0D2137] text-[#0D2137] px-7 py-3 rounded-xl text-sm font-bold hover:bg-[#0D2137] hover:text-white transition-colors no-underline">Solicitar avaliação gratuita</a>
