@@ -20,7 +20,50 @@ function fmtP(p: number, f: string) {
   return f === 'Aluguel' ? `${v}/mês` : v
 }
 
-// ── Dropdown localização com checkboxes ──────────────────────────
+// ── Multi-select tipos com checkboxes ──────────────────────────
+function TiposDropdown({ tipos, selected, onChange }: {
+  tipos: any[]; selected: string[]; onChange: (v: string[]) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const fn = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false) }
+    document.addEventListener('mousedown', fn)
+    return () => document.removeEventListener('mousedown', fn)
+  }, [])
+  const toggle = (nome: string) => onChange(selected.includes(nome) ? selected.filter(s => s !== nome) : [...selected, nome])
+  const label = selected.length === 0 ? 'Tipo de imóvel'
+    : selected.length === 1 ? selected[0]
+    : `${selected[0]} +${selected.length - 1}`
+
+  return (
+    <div className="relative" ref={ref}>
+      <button onClick={() => setOpen(o => !o)}
+        className="h-10 flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-4 text-sm hover:border-[#B8892A] transition-colors min-w-[160px]">
+        <span className={`flex-1 text-left truncate ${selected.length === 0 ? 'text-gray-400' : 'text-gray-800 font-medium'}`}>{label}</span>
+        {selected.length > 0
+          ? <button onClick={e => { e.stopPropagation(); onChange([]) }} className="text-gray-300 hover:text-gray-600 text-lg leading-none">×</button>
+          : <svg width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-gray-300"><path d="M6 9l6 6 6-6"/></svg>
+        }
+      </button>
+      {open && (
+        <div className="absolute top-full left-0 mt-1 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 min-w-[200px] max-h-64 overflow-y-auto">
+          {tipos.map(t => (
+            <label key={t.id} className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0">
+              <div onClick={() => toggle(t.nome)}
+                className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-all ${selected.includes(t.nome) ? 'bg-[#0D2137] border-[#0D2137]' : 'border-gray-300'}`}>
+                {selected.includes(t.nome) && <svg width="9" height="7" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+              </div>
+              <span onClick={() => toggle(t.nome)} className={`text-sm ${selected.includes(t.nome) ? 'text-[#0D2137] font-semibold' : 'text-gray-700'}`}>{t.nome}</span>
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Localização dropdown ──────────────────────────────────────
 function LocalizacaoDropdown({ cidades, bairros, selBairros, selCidades, onBairros, onCidades }: {
   cidades: any[]; bairros: any[]; selBairros: string[]; selCidades: string[]
   onBairros: (v: string[]) => void; onCidades: (v: string[]) => void
@@ -33,37 +76,33 @@ function LocalizacaoDropdown({ cidades, bairros, selBairros, selCidades, onBairr
     return () => document.removeEventListener('mousedown', fn)
   }, [])
   const total = selBairros.length + selCidades.length
-  const label = total === 0 ? 'Cidade ou bairro'
-    : total === 1
-      ? ([...cidades.filter(c => selCidades.includes(c.id)).map(c => c.nome),
-          ...bairros.filter(b => selBairros.includes(b.id)).map(b => b.nome)])[0]
-      : `${([...cidades.filter(c => selCidades.includes(c.id)).map(c => c.nome), ...bairros.filter(b => selBairros.includes(b.id)).map(b => b.nome)])[0]} +${total - 1}`
-
+  const allLabels = [
+    ...cidades.filter(c => selCidades.includes(c.id)).map(c => c.nome),
+    ...bairros.filter(b => selBairros.includes(b.id)).map(b => b.nome),
+  ]
+  const label = total === 0 ? 'Cidade ou bairro' : total === 1 ? allLabels[0] : `${allLabels[0]} +${total - 1}`
   const toggleB = (id: string) => onBairros(selBairros.includes(id) ? selBairros.filter(x => x !== id) : [...selBairros, id])
   const toggleC = (id: string) => onCidades(selCidades.includes(id) ? selCidades.filter(x => x !== id) : [...selCidades, id])
 
   return (
-    <div className="relative flex-1 min-w-[200px]" ref={ref}>
+    <div className="relative flex-1 min-w-[180px]" ref={ref}>
       <button onClick={() => setOpen(o => !o)}
-        className="w-full h-10 flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-4 text-sm hover:border-[#B8892A] transition-colors text-left">
-        <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-gray-400 shrink-0">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
-        </svg>
-        <span className={`flex-1 truncate ${total === 0 ? 'text-gray-400' : 'text-gray-800 font-medium'}`}>{label}</span>
+        className="w-full h-10 flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-4 text-sm hover:border-[#B8892A] transition-colors">
+        <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-gray-400 shrink-0"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span className={`flex-1 truncate text-left ${total === 0 ? 'text-gray-400' : 'text-gray-800 font-medium'}`}>{label}</span>
         {total > 0
-          ? <button onClick={e => { e.stopPropagation(); onBairros([]); onCidades([]) }} className="text-gray-300 hover:text-gray-600 text-base shrink-0">×</button>
+          ? <button onClick={e => { e.stopPropagation(); onBairros([]); onCidades([]) }} className="text-gray-300 hover:text-gray-600 text-lg leading-none shrink-0">×</button>
           : <svg width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-gray-300 shrink-0"><path d="M6 9l6 6 6-6"/></svg>
         }
       </button>
       {open && (
         <div className="absolute top-full left-0 mt-1 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 min-w-[300px] max-h-72 overflow-y-auto">
-          {cidades.length === 0 && <div className="px-4 py-6 text-center text-xs text-gray-400">Nenhuma cidade cadastrada</div>}
           {cidades.map(c => {
             const bc = bairros.filter(b => b.cidade_id === c.id)
             return (
               <div key={c.id}>
                 <div className="sticky top-0 bg-gray-50 px-4 py-2 flex items-center gap-2.5 border-b border-gray-100">
-                  <div onClick={() => toggleC(c.id)} className={`w-4.5 h-4.5 w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 cursor-pointer transition-all ${selCidades.includes(c.id) ? 'bg-[#0D2137] border-[#0D2137]' : 'border-gray-300'}`}>
+                  <div onClick={() => toggleC(c.id)} className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 cursor-pointer transition-all ${selCidades.includes(c.id) ? 'bg-[#0D2137] border-[#0D2137]' : 'border-gray-300'}`}>
                     {selCidades.includes(c.id) && <svg width="9" height="7" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
                   </div>
                   <span onClick={() => toggleC(c.id)} className={`text-xs font-bold uppercase tracking-wide cursor-pointer ${selCidades.includes(c.id) ? 'text-[#0D2137]' : 'text-gray-500'}`}>{c.nome} - {c.estado}</span>
@@ -76,7 +115,6 @@ function LocalizacaoDropdown({ cidades, bairros, selBairros, selCidades, onBairr
                     <span onClick={() => toggleB(b.id)} className={`text-sm ${selBairros.includes(b.id) ? 'text-[#0D2137] font-semibold' : 'text-gray-700'}`}>{b.nome}, {c.nome}</span>
                   </label>
                 ))}
-                {bc.length === 0 && <div className="pl-9 pr-4 py-2 text-xs text-gray-300 italic">Sem bairros cadastrados</div>}
               </div>
             )
           })}
@@ -100,13 +138,10 @@ export default function ImoveisHomePage() {
   const markersRef = useRef<any[]>([])
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
-  // Filtros — barra superior (simples)
   const [finalidade, setFinalidade] = useState('')
-  const [tipoSel, setTipoSel] = useState('')
+  const [tiposSel, setTiposSel] = useState<string[]>([])
   const [bairrosSel, setBairrosSel] = useState<string[]>([])
   const [cidadesSel, setCidadesSel] = useState<string[]>([])
-
-  // Filtros — sidebar (avançados)
   const [precoMin, setPrecoMin] = useState('')
   const [precoMax, setPrecoMax] = useState('')
   const [dorms, setDorms] = useState('')
@@ -136,30 +171,29 @@ export default function ImoveisHomePage() {
   useEffect(() => {
     let list = [...imoveis]
     if (finalidade) list = list.filter(i => i.finalidade === finalidade)
-    if (tipoSel) list = list.filter(i => i.tipo === tipoSel)
+    if (tiposSel.length) list = list.filter(i => tiposSel.includes(i.tipo))
     if (cidadesSel.length || bairrosSel.length)
       list = list.filter(i => cidadesSel.includes(i.cidade_id) || bairrosSel.includes(i.bairro_id))
     if (precoMin) list = list.filter(i => i.preco >= parseFloat(precoMin))
     if (precoMax) list = list.filter(i => i.preco <= parseFloat(precoMax))
-    if (dorms) list = list.filter(i => (i.dorms || 0) >= parseInt(dorms))
-    if (vagas) list = list.filter(i => (i.vagas || 0) >= parseInt(vagas))
-    if (areaMin) list = list.filter(i => (i.area || 0) >= parseFloat(areaMin))
-    if (areaMax) list = list.filter(i => (i.area || 0) <= parseFloat(areaMax))
+    if (dorms) list = list.filter(i => (i.dorms||0) >= parseInt(dorms))
+    if (vagas) list = list.filter(i => (i.vagas||0) >= parseInt(vagas))
+    if (areaMin) list = list.filter(i => (i.area||0) >= parseFloat(areaMin))
+    if (areaMax) list = list.filter(i => (i.area||0) <= parseFloat(areaMax))
     if (ordenar === 'menorPreco') list.sort((a, b) => a.preco - b.preco)
     else if (ordenar === 'maiorPreco') list.sort((a, b) => b.preco - a.preco)
     else if (ordenar === 'maiorArea') list.sort((a, b) => (b.area||0) - (a.area||0))
     setFiltered(list)
-  }, [imoveis, finalidade, tipoSel, cidadesSel, bairrosSel, precoMin, precoMax, dorms, vagas, areaMin, areaMax, ordenar])
+  }, [imoveis, finalidade, tiposSel, cidadesSel, bairrosSel, precoMin, precoMax, dorms, vagas, areaMin, areaMax, ordenar])
 
-  // Mapa Leaflet
   useEffect(() => {
     if (view !== 'mapa' || mapLoaded) return
     const s = document.createElement('script')
     s.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'
     s.onload = () => setMapLoaded(true)
     document.head.appendChild(s)
-    const l = document.createElement('link')
-    l.rel = 'stylesheet'; l.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'
+    const l = document.createElement('link'); l.rel = 'stylesheet'
+    l.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'
     document.head.appendChild(l)
   }, [view, mapLoaded])
 
@@ -179,213 +213,145 @@ export default function ImoveisHomePage() {
       const lat = -29.67 + (Math.random() - 0.5) * 0.08
       const lng = -52.7 + (Math.random() - 0.5) * 0.1
       const color = im.finalidade === 'Venda' ? '#4F46E5' : '#10B981'
-      const icon = L.divIcon({ html: `<div style="background:${color};color:#fff;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3)">${fmtP(im.preco, im.finalidade)}</div>`, className: '', iconAnchor: [30, 15] })
-      const mk = L.marker([lat, lng], { icon }).addTo(mapInstanceRef.current)
+      const icon = L.divIcon({ html: `<div style="background:${color};color:#fff;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3)">${fmtP(im.preco,im.finalidade)}</div>`, className: '', iconAnchor: [30,15] })
+      const mk = L.marker([lat,lng],{icon}).addTo(mapInstanceRef.current)
       mk.on('click', () => window.location.href = `/site/imoveis/${im.id}`)
       markersRef.current.push(mk)
     })
   }, [filtered, mapLoaded])
 
   function limparTudo() {
-    setFinalidade(''); setTipoSel(''); setBairrosSel([]); setCidadesSel([])
+    setFinalidade(''); setTiposSel([]); setBairrosSel([]); setCidadesSel([])
     setPrecoMin(''); setPrecoMax(''); setDorms(''); setVagas(''); setAreaMin(''); setAreaMax(''); setOrdenar('recente')
   }
 
-  const temFiltro = !!(finalidade || tipoSel || bairrosSel.length || cidadesSel.length || precoMin || precoMax || dorms || vagas || areaMin || areaMax)
-  const temFiltroSidebar = !!(precoMin || precoMax || dorms || vagas || areaMin || areaMax)
-
-  // colunas do grid conforme sidebar
-  const gridCols = sidebarOpen
-    ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-    : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+  const temFiltro = !!(finalidade || tiposSel.length || bairrosSel.length || cidadesSel.length || precoMin || precoMax || dorms || vagas || areaMin || areaMax)
+  const gridCols = sidebarOpen ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
 
   return (
     <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">
-
-      {/* ═══════════════════════════════════════════════════════
-          NAV
-      ═══════════════════════════════════════════════════════ */}
+      {/* NAV */}
       <nav className="bg-[#0D2137] h-14 px-6 flex items-center justify-between shrink-0 shadow-lg z-50">
-        <Link href="/site/imoveis">
-          <Image src="/logo.png" alt="VisionLar" width={120} height={44} className="object-contain" />
-        </Link>
+        <Link href="/site/imoveis"><Image src="/logo.png" alt="VisionLar" width={120} height={44} className="object-contain"/></Link>
         <div className="hidden md:flex gap-1">
-          {[['Imóveis','/site/imoveis'],['Institucional','/site/institucional'],['Contato','/site/contato']].map(([l,h]) => (
+          {[['Imóveis','/site/imoveis'],['Institucional','/site/institucional'],['Contato','/site/contato']].map(([l,h])=>(
             <Link key={l} href={h} className="text-white/65 hover:text-white hover:bg-white/10 px-4 py-1.5 rounded-lg text-sm font-medium transition-all">{l}</Link>
           ))}
         </div>
-        <a href={`https://wa.me/${WPP}?text=${encodeURIComponent('Olá! Vim pelo site da VisionLar Imóveis.')}`}
-          target="_blank" rel="noopener"
+        <a href={`https://wa.me/${WPP}?text=${encodeURIComponent('Olá! Vim pelo site da VisionLar Imóveis.')}`} target="_blank" rel="noopener"
           className="bg-[#B8892A] text-[#0D2137] px-4 py-1.5 rounded-xl text-xs font-bold hover:bg-[#D4A843] transition-colors flex items-center gap-1.5">
           <svg width="13" height="13" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 2C6.477 2 2 6.484 2 12.017c0 1.867.486 3.622 1.338 5.147L2 22l4.975-1.302A10 10 0 0012 22c5.523 0 10-4.487 10-10C22 6.48 17.522 2 12 2z"/></svg>
           WhatsApp
         </a>
       </nav>
 
-      {/* ═══════════════════════════════════════════════════════
-          BARRA DE BUSCA SIMPLES (3 campos apenas)
-      ═══════════════════════════════════════════════════════ */}
+      {/* BARRA BUSCA SIMPLES */}
       <div className="bg-white border-b border-gray-200 shadow-sm shrink-0 z-40">
-        <div className="flex items-center gap-3 px-4 py-3">
-          {/* Botão sidebar */}
+        <div className="flex items-center gap-3 px-4 py-3 flex-wrap">
           <button onClick={() => setSidebarOpen(o => !o)}
             className={`h-10 px-3 rounded-xl border transition-all flex items-center gap-1.5 text-xs font-semibold shrink-0 ${sidebarOpen ? 'bg-[#0D2137] text-white border-[#0D2137]' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'}`}>
-            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-            </svg>
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             Filtros
           </button>
-
           <div className="w-px h-6 bg-gray-200 shrink-0"/>
-
           {/* 1. TRANSAÇÃO */}
           <div className="flex gap-1 shrink-0">
-            {[['', 'Todos'], ['Venda', 'Comprar'], ['Aluguel', 'Alugar']].map(([val, label]) => (
+            {[['','Todos'],['Venda','Comprar'],['Aluguel','Alugar']].map(([val,label])=>(
               <button key={val} onClick={() => setFinalidade(val)}
-                className={`h-10 px-4 rounded-xl text-sm font-semibold transition-all border ${
-                  finalidade === val
-                    ? 'bg-[#0D2137] text-white border-[#0D2137]'
-                    : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'
-                }`}>{label}
+                className={`h-10 px-4 rounded-xl text-sm font-semibold border transition-all ${finalidade===val?'bg-[#0D2137] text-white border-[#0D2137]':'bg-white text-gray-600 border-gray-200 hover:border-gray-400'}`}>
+                {label}
               </button>
             ))}
           </div>
-
           <div className="w-px h-6 bg-gray-200 shrink-0"/>
-
-          {/* 2. TIPO DE IMÓVEL */}
-          <select
-            value={tipoSel}
-            onChange={e => setTipoSel(e.target.value)}
-            className="h-10 border border-gray-200 rounded-xl px-4 text-sm bg-white outline-none focus:border-[#B8892A] transition-colors text-gray-600 min-w-[160px]"
-          >
-            <option value="">Tipo de imóvel</option>
-            {tipos.map(t => <option key={t.id} value={t.nome}>{t.nome}</option>)}
-          </select>
-
+          {/* 2. TIPO — multi-select com checkboxes */}
+          <TiposDropdown tipos={tipos} selected={tiposSel} onChange={setTiposSel} />
           <div className="w-px h-6 bg-gray-200 shrink-0"/>
-
           {/* 3. LOCALIZAÇÃO */}
-          <LocalizacaoDropdown
-            cidades={cidades} bairros={bairros}
+          <LocalizacaoDropdown cidades={cidades} bairros={bairros}
             selBairros={bairrosSel} selCidades={cidadesSel}
             onBairros={setBairrosSel} onCidades={setCidadesSel}
           />
-
-          {/* Limpar */}
           {temFiltro && (
-            <button onClick={limparTudo}
-              className="h-10 px-3 rounded-xl border border-red-200 text-red-500 text-xs font-bold hover:bg-red-50 transition-colors shrink-0">
-              ✕ Limpar
-            </button>
+            <button onClick={limparTudo} className="h-10 px-3 rounded-xl border border-red-200 text-red-500 text-xs font-bold hover:bg-red-50 shrink-0">✕ Limpar</button>
           )}
-
-          {/* Resultado + View toggle — direita */}
+          {/* Direita */}
           <div className="ml-auto flex items-center gap-3 shrink-0">
-            <span className="text-xs text-gray-500 whitespace-nowrap">
-              <strong className="text-gray-800">{filtered.length}</strong> imóveis
-            </span>
-            <select value={ordenar} onChange={e => setOrdenar(e.target.value)}
-              className="h-10 border border-gray-200 rounded-xl px-3 text-xs bg-white outline-none focus:border-[#B8892A] text-gray-600">
+            <span className="text-xs text-gray-500"><strong className="text-gray-800">{filtered.length}</strong> imóveis</span>
+            <select value={ordenar} onChange={e => setOrdenar(e.target.value)} className="h-10 border border-gray-200 rounded-xl px-3 text-xs bg-white outline-none focus:border-[#B8892A] text-gray-600">
               <option value="recente">Recentes</option>
               <option value="menorPreco">Menor preço</option>
               <option value="maiorPreco">Maior preço</option>
               <option value="maiorArea">Maior área</option>
             </select>
             <div className="flex gap-1 border border-gray-200 rounded-xl p-1 bg-white">
-              <button onClick={() => setView('grid')} title="Grid"
-                className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${view === 'grid' ? 'bg-[#0D2137] text-white' : 'text-gray-400 hover:bg-gray-100'}`}>
+              <button onClick={() => setView('grid')} title="Grid" className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${view==='grid'?'bg-[#0D2137] text-white':'text-gray-400 hover:bg-gray-100'}`}>
                 <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h7v7H3V3zm11 0h7v7h-7V3zM3 14h7v7H3v-7zm11 0h7v7h-7v-7z"/></svg>
               </button>
-              <button onClick={() => setView('mapa')} title="Mapa"
-                className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-colors ${view === 'mapa' ? 'bg-[#0D2137] text-white' : 'text-gray-400 hover:bg-gray-100'}`}>
-                🗺️
-              </button>
+              <button onClick={() => setView('mapa')} title="Mapa" className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-colors ${view==='mapa'?'bg-[#0D2137] text-white':'text-gray-400 hover:bg-gray-100'}`}>🗺️</button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ═══════════════════════════════════════════════════════
-          CORPO — sidebar + conteúdo
-      ═══════════════════════════════════════════════════════ */}
+      {/* CORPO */}
       <div className="flex flex-1 overflow-hidden">
-
-        {/* SIDEBAR FILTROS AVANÇADOS */}
+        {/* SIDEBAR */}
         <aside className={`bg-white border-r border-gray-200 shrink-0 transition-all duration-300 overflow-hidden flex flex-col ${sidebarOpen ? 'w-56' : 'w-0'}`}>
           <div className="flex-1 overflow-y-auto p-4">
-            <div className="flex items-center justify-between mb-5">
-              <h3 className="text-xs font-bold text-gray-800 uppercase tracking-wider">Filtros avançados</h3>
-              {temFiltroSidebar && (
-                <button onClick={() => { setPrecoMin(''); setPrecoMax(''); setDorms(''); setVagas(''); setAreaMin(''); setAreaMax('') }}
-                  className="text-[10px] text-red-500 font-bold hover:text-red-700">Limpar</button>
-              )}
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider">Filtros avançados</h3>
             </div>
-
             <div className="space-y-5">
-              {/* Faixa de preço */}
               <div>
                 <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-2">Faixa de Preço (R$)</label>
-                <input type="number" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-[#B8892A] mb-1.5" placeholder="Mínimo" value={precoMin} onChange={e => setPrecoMin(e.target.value)} />
-                <input type="number" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-[#B8892A]" placeholder="Máximo" value={precoMax} onChange={e => setPrecoMax(e.target.value)} />
+                <input type="number" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-400 mb-1.5" placeholder="Mínimo" value={precoMin} onChange={e => setPrecoMin(e.target.value)}/>
+                <input type="number" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-400" placeholder="Máximo" value={precoMax} onChange={e => setPrecoMax(e.target.value)}/>
               </div>
-
-              {/* Dormitórios */}
               <div>
                 <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-2">Dormitórios</label>
                 <div className="grid grid-cols-5 gap-1">
-                  {['', '1', '2', '3', '4+'].map(d => (
-                    <button key={d} onClick={() => setDorms(d === '4+' ? '4' : d)}
-                      className={`py-2 rounded-lg text-[10px] font-bold border transition-all ${(d === '4+' ? dorms === '4' : dorms === d) ? 'bg-[#0D2137] text-white border-[#0D2137]' : 'border-gray-200 text-gray-500 hover:border-gray-400'}`}>
-                      {d || 'Td'}
+                  {['','1','2','3','4+'].map(d=>(
+                    <button key={d} onClick={() => setDorms(d==='4+'?'4':d)}
+                      className={`py-2 rounded-lg text-[10px] font-bold border transition-all ${(d==='4+'?dorms==='4':dorms===d)?'bg-[#0D2137] text-white border-[#0D2137]':'border-gray-200 text-gray-500 hover:border-gray-400'}`}>
+                      {d||'Td'}
                     </button>
                   ))}
                 </div>
               </div>
-
-              {/* Vagas */}
               <div>
                 <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-2">Vagas Garagem</label>
                 <div className="grid grid-cols-4 gap-1">
-                  {['', '1', '2', '3+'].map(v => (
-                    <button key={v} onClick={() => setVagas(v === '3+' ? '3' : v)}
-                      className={`py-2 rounded-lg text-[10px] font-bold border transition-all ${(v === '3+' ? vagas === '3' : vagas === v) ? 'bg-[#0D2137] text-white border-[#0D2137]' : 'border-gray-200 text-gray-500 hover:border-gray-400'}`}>
-                      {v || 'Td'}
+                  {['','1','2','3+'].map(v=>(
+                    <button key={v} onClick={() => setVagas(v==='3+'?'3':v)}
+                      className={`py-2 rounded-lg text-[10px] font-bold border transition-all ${(v==='3+'?vagas==='3':vagas===v)?'bg-[#0D2137] text-white border-[#0D2137]':'border-gray-200 text-gray-500 hover:border-gray-400'}`}>
+                      {v||'Td'}
                     </button>
                   ))}
                 </div>
               </div>
-
-              {/* Área */}
               <div>
                 <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-2">Área (m²)</label>
-                <input type="number" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-[#B8892A] mb-1.5" placeholder="Mínima" value={areaMin} onChange={e => setAreaMin(e.target.value)} />
-                <input type="number" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-[#B8892A]" placeholder="Máxima" value={areaMax} onChange={e => setAreaMax(e.target.value)} />
+                <input type="number" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-400 mb-1.5" placeholder="Mínima" value={areaMin} onChange={e => setAreaMin(e.target.value)}/>
+                <input type="number" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-400" placeholder="Máxima" value={areaMax} onChange={e => setAreaMax(e.target.value)}/>
               </div>
             </div>
           </div>
-
-          {/* Footer sidebar */}
           <div className="border-t border-gray-100 p-3">
-            <button onClick={() => setSidebarOpen(false)}
-              className="w-full flex items-center justify-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 py-1 transition-colors">
+            <button onClick={() => setSidebarOpen(false)} className="w-full flex items-center justify-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 py-1">
               <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
               Recolher filtros
             </button>
           </div>
         </aside>
 
-        {/* ÁREA DE CONTEÚDO */}
+        {/* CONTEÚDO */}
         <div className="flex-1 overflow-y-auto">
-          {/* GRID de imóveis */}
           {view === 'grid' && (
             <div className="p-4">
               {loading ? (
                 <div className="flex items-center justify-center py-24">
-                  <div className="text-center text-gray-400">
-                    <div className="text-5xl mb-4 animate-pulse">🏠</div>
-                    <p className="text-sm">Carregando imóveis...</p>
-                  </div>
+                  <div className="text-center text-gray-400"><div className="text-5xl mb-4 animate-pulse">🏠</div><p className="text-sm">Carregando imóveis...</p></div>
                 </div>
               ) : filtered.length === 0 ? (
                 <div className="flex items-center justify-center py-24">
@@ -398,35 +364,27 @@ export default function ImoveisHomePage() {
                 </div>
               ) : (
                 <div className={`grid gap-4 ${gridCols}`}>
-                  {filtered.map((im, idx) => <CardImovel key={im.id} im={im} idx={idx} />)}
+                  {filtered.map((im,idx) => <CardImovel key={im.id} im={im} idx={idx}/>)}
                 </div>
               )}
             </div>
           )}
-
-          {/* MAPA */}
           {view === 'mapa' && (
             <div className="flex h-full">
               <div className="flex-1 relative min-h-full">
-                <div ref={mapRef} className="absolute inset-0" />
-                {!mapLoaded && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-                    <div className="text-center text-gray-400"><div className="text-3xl mb-2 animate-pulse">🗺️</div><p className="text-sm">Carregando mapa...</p></div>
-                  </div>
-                )}
+                <div ref={mapRef} className="absolute inset-0"/>
+                {!mapLoaded && <div className="absolute inset-0 flex items-center justify-center bg-gray-100"><div className="text-center text-gray-400"><div className="text-3xl mb-2 animate-pulse">🗺️</div><p className="text-sm">Carregando mapa...</p></div></div>}
               </div>
               <div className="w-72 bg-white border-l border-gray-200 overflow-y-auto shrink-0">
-                <div className="p-3 border-b border-gray-100 sticky top-0 bg-white">
-                  <p className="text-xs font-bold text-gray-700">{filtered.length} imóveis no mapa</p>
-                </div>
-                {filtered.map((im, idx) => (
-                  <div key={im.id} onClick={() => window.location.href = `/site/imoveis/${im.id}`}
+                <div className="p-3 border-b border-gray-100 sticky top-0 bg-white"><p className="text-xs font-bold text-gray-700">{filtered.length} imóveis</p></div>
+                {filtered.map((im,idx) => (
+                  <div key={im.id} onClick={() => window.location.href=`/site/imoveis/${im.id}`}
                     className="flex gap-2.5 p-3 border-b border-gray-100 cursor-pointer hover:bg-amber-50 transition-colors">
-                    <img src={im.foto_url || FOTOS[idx % FOTOS.length]} alt={im.titulo} className="w-16 h-12 object-cover rounded-lg shrink-0" />
+                    <img src={im.foto_url||FOTOS[idx%FOTOS.length]} alt={im.titulo} className="w-16 h-12 object-cover rounded-lg shrink-0"/>
                     <div className="min-w-0">
                       <div className="text-xs font-bold text-gray-900 truncate">{im.titulo}</div>
-                      <div className="text-[10px] text-gray-400">📍 {im.bairro?.nome || im.cidade?.nome}</div>
-                      <div className="text-xs font-bold text-[#0D2137] mt-0.5">{fmtP(im.preco, im.finalidade)}</div>
+                      <div className="text-[10px] text-gray-400">📍 {im.bairro?.nome||im.cidade?.nome}</div>
+                      <div className="text-xs font-bold text-[#0D2137] mt-0.5">{fmtP(im.preco,im.finalidade)}</div>
                     </div>
                   </div>
                 ))}
@@ -439,67 +397,43 @@ export default function ImoveisHomePage() {
   )
 }
 
-// ── Card do imóvel ────────────────────────────────────────────────
 function CardImovel({ im, idx }: { im: any; idx: number }) {
   const foto = im.foto_url || FOTOS[idx % FOTOS.length]
   return (
-    <div
-      className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer group"
-      onClick={() => window.location.href = `/site/imoveis/${im.id}`}
-    >
-      {/* Foto */}
-      <div className="relative overflow-hidden bg-gray-100" style={{ aspectRatio: '4/3' }}>
-        <img src={foto} alt={im.titulo}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer group"
+      onClick={() => window.location.href=`/site/imoveis/${im.id}`}>
+      <div className="relative overflow-hidden bg-gray-100" style={{aspectRatio:'4/3'}}>
+        <img src={foto} alt={im.titulo} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
         <div className="absolute top-2.5 left-2.5 flex gap-1.5">
-          <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full shadow ${im.finalidade === 'Venda' ? 'bg-indigo-600 text-white' : 'bg-emerald-600 text-white'}`}>
-            {im.finalidade}
-          </span>
+          <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full shadow ${im.finalidade==='Venda'?'bg-indigo-600 text-white':'bg-emerald-600 text-white'}`}>{im.finalidade}</span>
           <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-white text-gray-700 shadow">{im.tipo}</span>
         </div>
         {im.destaque && <div className="absolute top-2.5 right-2.5 bg-[#B8892A] text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow">★</div>}
         {im.codigo && <div className="absolute bottom-2.5 left-2.5 bg-black/60 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">{im.codigo}</div>}
-        {/* Dots */}
-        <div className="absolute bottom-2.5 right-0 left-0 flex justify-center gap-1.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-white/80"/>
-          <div className="w-1.5 h-1.5 rounded-full bg-white/30"/>
-          <div className="w-1.5 h-1.5 rounded-full bg-white/30"/>
-        </div>
       </div>
-
-      {/* Corpo */}
       <div className="p-3.5">
         <div className="text-[10px] text-gray-500 mb-0.5">{im.tipo}</div>
-        <div className="font-bold text-base text-gray-900 leading-tight truncate">
-          {im.bairro?.nome || im.titulo}
-        </div>
+        <div className="font-bold text-base text-gray-900 leading-tight truncate">{im.bairro?.nome||im.titulo}</div>
         <div className="text-xs text-gray-500 mb-2.5">{im.cidade?.nome} - {im.cidade?.estado}</div>
-
-        {/* Specs */}
-        {(im.area || im.dorms || im.banhs || im.vagas) && (
+        {(im.area||im.dorms||im.banhs||im.vagas) && (
           <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-gray-500 mb-3 pb-3 border-b border-gray-100">
-            {im.area && <span>{im.area}m²</span>}
-            {im.dorms ? <span>{im.dorms} {im.dorms === 1 ? 'quarto' : 'quartos'}</span> : null}
-            {im.banhs ? <span>{im.banhs} {im.banhs === 1 ? 'banho' : 'banhos'}</span> : null}
-            {im.vagas ? <span>{im.vagas} {im.vagas === 1 ? 'vaga' : 'vagas'}</span> : null}
+            {im.area&&<span>{im.area}m²</span>}
+            {im.dorms?<span>{im.dorms} {im.dorms===1?'quarto':'quartos'}</span>:null}
+            {im.banhs?<span>{im.banhs} {im.banhs===1?'banho':'banhos'}</span>:null}
+            {im.vagas?<span>{im.vagas} {im.vagas===1?'vaga':'vagas'}</span>:null}
           </div>
         )}
-
-        {/* Preço + ação */}
         <div className="flex items-end justify-between">
           <div>
-            <div className="text-[9px] text-gray-400 font-semibold">{im.finalidade === 'Venda' ? 'Comprar' : 'Alugar'}</div>
-            <div className="font-bold text-lg text-gray-900 leading-none" style={{ fontFamily: 'Playfair Display, serif' }}>
-              {im.preco >= 1e6 ? `R$ ${(im.preco/1e6).toFixed(1).replace('.',',')}M` : im.preco >= 1e3 ? `R$ ${(im.preco/1e3).toFixed(0)}k` : `R$ ${im.preco?.toLocaleString('pt-BR')}`}
-              {im.finalidade === 'Aluguel' && <span className="text-[10px] text-gray-400 font-normal">/mês</span>}
+            <div className="text-[9px] text-gray-400 font-semibold">{im.finalidade==='Venda'?'Comprar':'Alugar'}</div>
+            <div className="font-bold text-lg text-gray-900 leading-none" style={{fontFamily:'Playfair Display,serif'}}>
+              {im.preco>=1e6?`R$ ${(im.preco/1e6).toFixed(1).replace('.',',')}M`:im.preco>=1e3?`R$ ${(im.preco/1e3).toFixed(0)}k`:`R$ ${im.preco?.toLocaleString('pt-BR')}`}
+              {im.finalidade==='Aluguel'&&<span className="text-[10px] text-gray-400 font-normal">/mês</span>}
             </div>
           </div>
-          <a
-            href={`https://wa.me/${WPP}?text=${encodeURIComponent(`Olá! Tenho interesse no imóvel${im.codigo ? ' código ' + im.codigo : ''}: ${im.titulo}`)}`}
-            target="_blank" rel="noopener"
-            onClick={e => e.stopPropagation()}
-            className="bg-green-500 text-white text-[10px] font-bold px-2.5 py-1.5 rounded-lg hover:bg-green-600 transition-colors flex items-center gap-1"
-          >
+          <a href={`https://wa.me/${WPP}?text=${encodeURIComponent(`Olá! Tenho interesse no imóvel${im.codigo?' código '+im.codigo:''}: ${im.titulo}`)}`}
+            target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
+            className="bg-green-500 text-white text-[10px] font-bold px-2.5 py-1.5 rounded-lg hover:bg-green-600 transition-colors flex items-center gap-1">
             <svg width="10" height="10" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 2C6.477 2 2 6.484 2 12.017c0 1.867.486 3.622 1.338 5.147L2 22l4.975-1.302A10 10 0 0012 22c5.523 0 10-4.487 10-10C22 6.48 17.522 2 12 2z"/></svg>
             WhatsApp
           </a>
