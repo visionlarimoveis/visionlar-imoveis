@@ -231,18 +231,22 @@ export default function ImoveisHomePage() {
   return (
     <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">
       {/* NAV */}
-      <nav className="bg-[#0D2137] px-6 flex items-center justify-between shrink-0 shadow-lg z-50" style={{height:"64px", overflow:"hidden"}}>
-        <Link href="/site/imoveis"><Image src="/logo.png" alt="VisionLar" width={150} height={54} className="object-contain"/></Link>
-        <div className="hidden md:flex gap-1">
-          {[['Imóveis','/site/imoveis'],['Institucional','/site/institucional'],['Contato','/site/contato']].map(([l,h])=>(
-            <Link key={l} href={h} className="text-white/65 hover:text-white hover:bg-white/10 px-4 py-1.5 rounded-lg text-sm font-medium transition-all">{l}</Link>
-          ))}
+      <nav className="bg-[#0D2137] shrink-0 shadow-lg z-50" style={{height:"72px"}}>
+        <div className="h-full px-6 flex items-center justify-between">
+          <Link href="/site/imoveis">
+            <Image src="/logo.png" alt="VisionLar" width={155} height={56} className="object-contain" />
+          </Link>
+          <div className="hidden md:flex gap-1">
+            {[['Imóveis','/site/imoveis'],['Institucional','/site/institucional'],['Contato','/site/contato']].map(([l,h])=>(
+              <Link key={l} href={h} className="text-white/65 hover:text-white hover:bg-white/10 px-4 py-1.5 rounded-lg text-sm font-medium transition-all">{l}</Link>
+            ))}
+          </div>
+          <a href={`https://wa.me/${WPP}?text=${encodeURIComponent('Olá! Vim pelo site da VisionLar Imóveis.')}`} target="_blank" rel="noopener"
+            className="bg-[#B8892A] text-[#0D2137] px-4 py-1.5 rounded-xl text-xs font-bold hover:bg-[#D4A843] transition-colors flex items-center gap-1.5">
+            <svg width="13" height="13" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 2C6.477 2 2 6.484 2 12.017c0 1.867.486 3.622 1.338 5.147L2 22l4.975-1.302A10 10 0 0012 22c5.523 0 10-4.487 10-10C22 6.48 17.522 2 12 2z"/></svg>
+            WhatsApp
+          </a>
         </div>
-        <a href={`https://wa.me/${WPP}?text=${encodeURIComponent('Olá! Vim pelo site da VisionLar Imóveis.')}`} target="_blank" rel="noopener"
-          className="bg-[#B8892A] text-[#0D2137] px-4 py-1.5 rounded-xl text-xs font-bold hover:bg-[#D4A843] transition-colors flex items-center gap-1.5">
-          <svg width="13" height="13" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 2C6.477 2 2 6.484 2 12.017c0 1.867.486 3.622 1.338 5.147L2 22l4.975-1.302A10 10 0 0012 22c5.523 0 10-4.487 10-10C22 6.48 17.522 2 12 2z"/></svg>
-          WhatsApp
-        </a>
       </nav>
 
       {/* BARRA BUSCA SIMPLES */}
