@@ -35,7 +35,7 @@ export default function ConfigPage() {
           </div>
           <div className="p-5 space-y-2">
             {[
-              ['NEXT_PUBLIC_SUPABASE_URL', 'https://mhwxbcintssgfnrftws.supabase.co'],
+              ['NEXT_PUBLIC_SUPABASE_URL', 'https://sgrsjmizmwbsotamfsbw.supabase.co'],
               ['NEXT_PUBLIC_SUPABASE_ANON_KEY', 'sb_publishable_2YnL7v...'],
               ['NEXT_PUBLIC_WHATSAPP', '5551997901012'],
               ['NEXT_PUBLIC_SITE_URL', 'https://visionlar.vercel.app'],
