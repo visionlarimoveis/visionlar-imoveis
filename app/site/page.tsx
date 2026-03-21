@@ -1,7 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import Image from 'next/image'
 import Link from 'next/link'
-import HeroBusca from '@/components/ui/HeroBusca'
 
 const WPP = process.env.NEXT_PUBLIC_WHATSAPP || '5551997901012'
 
@@ -44,10 +43,19 @@ export default async function SitePage() {
         </h1>
         <p className="text-white/50 text-sm max-w-md mx-auto mb-10">Especialistas em intermediação imobiliária com atendimento personalizado e resultados reais.</p>
 
-        {/* Busca hero — filtros reais com redirect */}
-        <div className="max-w-4xl mx-auto w-full px-4">
-          <HeroBusca />
-        </div>
+                {/* Botão ver imóveis */}
+        <a
+          href="/site/imoveis"
+          className="inline-flex items-center gap-3 bg-white text-[#0D2137] px-10 py-4 rounded-2xl text-base font-bold hover:bg-gray-100 transition-all hover:-translate-y-1 hover:shadow-xl shadow-lg mb-2"
+        >
+          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          </svg>
+          Ver todos os imóveis
+          <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
 
         {/* Stats */}
         <div className="flex justify-center gap-16 mt-10 pt-8 border-t border-white/[0.08]">
@@ -165,9 +173,18 @@ export default async function SitePage() {
             </ul>
           </div>
         </div>
-        <div className="border-t border-white/[0.08] pt-4 flex justify-between text-white/20 text-[10px]">
+        <div className="border-t border-white/[0.08] pt-4 flex justify-between items-center text-white/20 text-[10px]">
           <span>© 2025 VisionLar Imóveis. Todos os direitos reservados.</span>
-          <span>CRECI-RS 00000-J</span>
+          <div className="flex items-center gap-4">
+            <span>CRECI-RS 00000-J</span>
+            <a
+              href="/dashboard"
+              className="text-white/15 hover:text-white/50 transition-colors text-[10px] border border-white/10 px-2.5 py-1 rounded-lg hover:border-white/25"
+              title="Área administrativa"
+            >
+              🔐 Adm
+            </a>
+          </div>
         </div>
       </footer>
     </div>
