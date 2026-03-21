@@ -103,7 +103,7 @@ export default async function SitePage() {
             {imoveis.map((i: any, idx: number) => (
               <div key={i.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer">
                 <div className="relative h-48 overflow-hidden bg-gray-100">
-                  <img src={i.foto_url || FOTOS[idx % FOTOS.length]} alt={i.titulo} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" onError={(e) => { (e.target as any).src = FOTOS[0] }} />
+                  <img src={i.foto_url || FOTOS[idx % FOTOS.length]} alt={i.titulo} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"} />
                   <div className="absolute top-2 left-2">
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${i.finalidade === 'Venda' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700'}`}>{i.finalidade}</span>
                   </div>
