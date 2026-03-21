@@ -27,8 +27,8 @@ async function getConfig() {
 // Componente de nav reutilizável
 function Nav() {
   return (
-    <nav className="bg-[#0D2137] sticky top-0 z-50 shadow-lg">
-      <div className="px-6 flex items-center justify-between" style={{ height: "72px" }}>
+    <nav className="bg-[#0D2137] sticky top-0 z-50 shadow-lg" style={{ height: "64px", overflow: "hidden" }}>
+      <div className="h-full px-6 flex items-center justify-between">
         <Link href="/site/imoveis" className="flex items-center">
           <Image src="/logo.png" alt="VisionLar" width={130} height={44} className="object-contain"  />
         </Link>
