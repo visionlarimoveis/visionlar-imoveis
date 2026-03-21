@@ -19,7 +19,6 @@ function fmtP(p: number) {
 }
 
 const WPP = process.env.NEXT_PUBLIC_WHATSAPP || '5551997901012'
-const FOTOS = ['https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80','https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=600&q=80','https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80']
 
 export default async function SitePage() {
   const imoveis = await getImoveis()
@@ -103,7 +102,7 @@ export default async function SitePage() {
             {imoveis.map((i: any, idx: number) => (
               <div key={i.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer">
                 <div className="relative h-48 overflow-hidden bg-gray-100">
-                  <img src={i.foto_url || FOTOS[idx % FOTOS.length]} alt={i.titulo} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"} />
+                  <img src={i.foto_url || 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80'} alt={i.titulo} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"} />
                   <div className="absolute top-2 left-2">
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${i.finalidade === 'Venda' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700'}`}>{i.finalidade}</span>
                   </div>
