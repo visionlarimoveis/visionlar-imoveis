@@ -231,10 +231,10 @@ export default function ImoveisHomePage() {
   return (
     <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">
       {/* NAV */}
-      <nav className="bg-[#0D2137] shrink-0 shadow-lg z-50" style={{height:"72px"}}>
+      <nav className="bg-[#0D2137] shrink-0 shadow-lg z-50" style={{height:"64px",overflow:"hidden"}}>
         <div className="h-full px-6 flex items-center justify-between">
           <Link href="/site/imoveis">
-            <Image src="/logo.png" alt="VisionLar" width={155} height={56} className="object-contain" />
+            <Image src="/logo.png" alt="VisionLar" width={130} height={44} className="object-contain" />
           </Link>
           <div className="hidden md:flex gap-1">
             {[['Imóveis','/site/imoveis'],['Institucional','/site/institucional'],['Contato','/site/contato']].map(([l,h])=>(
