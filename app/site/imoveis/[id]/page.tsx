@@ -346,6 +346,7 @@ export default function ImovelPage() {
           <span className="text-white/25 text-[10px]">© 2025 VisionLar Imóveis</span>
           <a href="/adm" className="text-white/15 hover:text-white/50 text-[10px] border border-white/10 px-2.5 py-1 rounded-lg">🔐 Adm</a>
         </footer>
+      <FloatingButtons />
       </div>
 
       {/* ═══════════════════════════════════════════════════

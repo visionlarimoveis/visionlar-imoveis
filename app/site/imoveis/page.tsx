@@ -63,8 +63,8 @@ function TiposDropdown({ tipos, selected, onChange }: {
           ))}
         </div>
       )}
-    </div>
       <FloatingButtons />
+    </div>
   )
 }
 
