@@ -11,7 +11,7 @@ const emptyForm = {
   rua:'', numero:'', complemento:'', cep:'',
   area:'', dorms:'', suites:'', banhs:'', vagas:'',
   condominio:'', descricao:'', foto_url:'', fotos:[] as string[],
-  status:'Ativo' as any, destaque:false, corretor_id:'', mobiliado:'Não', mobiliado:'Não' as any,
+  status:'Ativo' as any, destaque:false, corretor_id:'', mobiliado:'Não' as any,
   latitude:'', longitude:'',
 }
 
