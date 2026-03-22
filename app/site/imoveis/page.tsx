@@ -209,9 +209,13 @@ export default function ImoveisHomePage() {
     if (!mapInstanceRef.current) return
     const L = (window as any).L
     markersRef.current.forEach(m => m.remove()); markersRef.current = []
+    // Centro padrão (Santa Cruz do Sul)
+    const CENTER_LAT = -29.6896
+    const CENTER_LNG = -52.7014
     filtered.forEach(im => {
-      const lat = -29.67 + (Math.random() - 0.5) * 0.08
-      const lng = -52.7 + (Math.random() - 0.5) * 0.1
+      // Usa coordenadas reais se disponíveis, senão distribui aleatoriamente
+      const lat = im.latitude ? parseFloat(im.latitude) : CENTER_LAT + (Math.random() - 0.5) * 0.08
+      const lng = im.longitude ? parseFloat(im.longitude) : CENTER_LNG + (Math.random() - 0.5) * 0.1
       const color = im.finalidade === 'Venda' ? '#4F46E5' : '#10B981'
       const icon = L.divIcon({ html: `<div style="background:${color};color:#fff;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3)">${fmtP(im.preco,im.finalidade)}</div>`, className: '', iconAnchor: [30,15] })
       const mk = L.marker([lat,lng],{icon}).addTo(mapInstanceRef.current)

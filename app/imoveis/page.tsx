@@ -11,6 +11,7 @@ const emptyForm = {
   area:'', dorms:'', suites:'', banhs:'', vagas:'',
   condominio:'', descricao:'', foto_url:'', fotos:[] as string[],
   status:'Ativo' as any, destaque:false, corretor_id:'',
+  latitude:'', longitude:'',
 }
 
 function fmtP(p:number,f:string){
@@ -255,6 +256,7 @@ export default function ImoveisPage() {
       suites: String(im.suites||''), banhs: String(im.banhs||''), vagas: String(im.vagas||''),
       condominio: String(im.condominio||''), descricao: im.descricao||'',
       foto_url: im.foto_url||'', fotos: im.fotos||[],
+      latitude: String(im.latitude||''), longitude: String(im.longitude||''),
       status: im.status||'Ativo', destaque: im.destaque||false, corretor_id: im.corretor_id||'',
     })
     setModalOpen(true)
@@ -279,6 +281,8 @@ export default function ImoveisPage() {
       condominio: form.condominio ? parseFloat(form.condominio) : 0,
       descricao: form.descricao||null, foto_url: fotoFinal,
       fotos: form.fotos, status: form.status, destaque: form.destaque,
+      latitude: form.latitude ? parseFloat(form.latitude) : null,
+      longitude: form.longitude ? parseFloat(form.longitude) : null,
       corretor_id: form.corretor_id||null,
     }
     if (form.codigo.trim()) payload.codigo = form.codigo.trim().toUpperCase()
@@ -392,6 +396,30 @@ export default function ImoveisPage() {
               <div><label className="text-[11px] font-bold text-gray-700 block mb-1">Preço (R$)<span className="text-red-500">*</span></label><input type="number" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500" placeholder="350000" value={form.preco} onChange={inp('preco')}/></div>
               <div><label className="text-[11px] font-bold text-gray-700 block mb-1">Cidade<span className="text-red-500">*</span></label><select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 bg-white" value={form.cidade_id} onChange={inp('cidade_id')}><option value="">Selecione</option>{cidades.map(c => <option key={c.id} value={c.id}>{c.nome} - {c.estado}</option>)}</select></div>
               <div><label className="text-[11px] font-bold text-gray-700 block mb-1">Bairro</label><select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 bg-white" value={form.bairro_id} onChange={inp('bairro_id')}><option value="">Selecione</option>{bairros.map(b => <option key={b.id} value={b.id}>{b.nome}</option>)}</select></div>
+              {/* Coordenadas GPS */}
+              <div className="col-span-2">
+                <label className="text-[11px] font-bold text-gray-700 block mb-2">
+                  📍 Coordenadas GPS
+                  <a href="https://maps.google.com" target="_blank" rel="noopener"
+                    className="ml-2 text-[10px] text-blue-500 font-normal hover:underline">
+                    → Pegar no Google Maps
+                  </a>
+                </label>
+                <div className="flex gap-2">
+                  <div className="flex-1">
+                    <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 font-mono" placeholder="Latitude  Ex: -29.6896" value={form.latitude} onChange={inp('latitude')}/>
+                    <div className="text-[9px] text-gray-400 mt-0.5">Latitude (ex: -29.6896)</div>
+                  </div>
+                  <div className="flex-1">
+                    <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 font-mono" placeholder="Longitude  Ex: -52.7014" value={form.longitude} onChange={inp('longitude')}/>
+                    <div className="text-[9px] text-gray-400 mt-0.5">Longitude (ex: -52.7014)</div>
+                  </div>
+                </div>
+                <div className="text-[10px] text-gray-400 mt-1.5 bg-gray-50 rounded-lg px-3 py-2 border border-gray-100">
+                  💡 <strong>Como pegar:</strong> Abra o Google Maps → clique direito no endereço → copie as coordenadas
+                </div>
+              </div>
+
               <div><label className="text-[11px] font-bold text-gray-700 block mb-1">Área (m²)</label><input type="number" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500" value={form.area} onChange={inp('area')}/></div>
               <div><label className="text-[11px] font-bold text-gray-700 block mb-1">Dormitórios</label><input type="number" min="0" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500" value={form.dorms} onChange={inp('dorms')}/></div>
               <div><label className="text-[11px] font-bold text-gray-700 block mb-1">Suítes</label><input type="number" min="0" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500" value={form.suites} onChange={inp('suites')}/></div>

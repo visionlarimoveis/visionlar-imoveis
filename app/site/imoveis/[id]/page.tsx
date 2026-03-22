@@ -190,7 +190,9 @@ export default function ImovelPage() {
           {/* MAPA INLINE */}
           {showMapa && (
             <div className="mb-6 rounded-2xl overflow-hidden border border-gray-200 shadow-sm" style={{height:'280px'}}>
-              <iframe src={`https://maps.google.com/maps?q=${encodeURIComponent(`${imovel.bairro?.nome||''} ${imovel.cidade?.nome} ${imovel.cidade?.estado}`)}&output=embed`}
+              <iframe src={imovel.latitude && imovel.longitude
+                ? `https://maps.google.com/maps?q=${imovel.latitude},${imovel.longitude}&z=17&output=embed`
+                : `https://maps.google.com/maps?q=${encodeURIComponent(`${imovel.endereco ? imovel.endereco + ', ' : ''}${imovel.bairro?.nome||''} ${imovel.cidade?.nome} ${imovel.cidade?.estado}`)}&output=embed`}
                 width="100%" height="280" style={{border:0}} allowFullScreen loading="lazy"/>
             </div>
           )}
