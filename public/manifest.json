@@ -3,40 +3,50 @@
   "short_name": "VisionLar",
   "description": "Encontre o imóvel ideal com a VisionLar Imóveis",
   "start_url": "/site/imoveis",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0D2137",
   "theme_color": "#0D2137",
   "orientation": "portrait-primary",
-  "categories": ["real estate", "business"],
   "lang": "pt-BR",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "/logo.png",
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
-  "screenshots": [],
   "shortcuts": [
     {
       "name": "Ver Imóveis",
       "short_name": "Imóveis",
-      "description": "Buscar imóveis disponíveis",
       "url": "/site/imoveis",
-      "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Falar no WhatsApp",
-      "short_name": "WhatsApp",
-      "description": "Entrar em contato",
-      "url": "/site/contato"
+      "name": "Contato",
+      "short_name": "Contato",
+      "url": "/site/contato",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     }
   ]
 }
