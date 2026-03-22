@@ -7,7 +7,8 @@ const BUCKET = 'imoveis-fotos'
 
 const emptyForm = {
   codigo:'', titulo:'', tipo:'', finalidade:'Venda' as any,
-  preco:'', cidade_id:'', bairro_id:'', endereco:'',
+  preco:'', cidade_id:'', bairro_id:'',
+  rua:'', numero:'', complemento:'', cep:'',
   area:'', dorms:'', suites:'', banhs:'', vagas:'',
   condominio:'', descricao:'', foto_url:'', fotos:[] as string[],
   status:'Ativo' as any, destaque:false, corretor_id:'',
@@ -252,7 +253,8 @@ export default function ImoveisPage() {
     setForm({
       codigo: im.codigo||'', titulo: im.titulo||'', tipo: im.tipo||'', finalidade: im.finalidade||'Venda',
       preco: String(im.preco||''), cidade_id: im.cidade_id||'', bairro_id: im.bairro_id||'',
-      endereco: im.endereco||'', area: String(im.area||''), dorms: String(im.dorms||''),
+      rua: im.rua||'', numero: im.numero||'', complemento: im.complemento||'', cep: im.cep||'',
+      area: String(im.area||''), dorms: String(im.dorms||''),
       suites: String(im.suites||''), banhs: String(im.banhs||''), vagas: String(im.vagas||''),
       condominio: String(im.condominio||''), descricao: im.descricao||'',
       foto_url: im.foto_url||'', fotos: im.fotos||[],
@@ -272,10 +274,14 @@ export default function ImoveisPage() {
     // Garante que foto_url é a primeira da galeria se não definida
     const fotoFinal = form.foto_url || form.fotos[0] || null
 
+    // Monta endereço completo a partir dos campos
+    const enderecoCompleto = [form.rua, form.numero, form.complemento].filter(Boolean).join(', ')
     const payload: any = {
       titulo, preco, cidade_id, tipo: form.tipo || tipos[0]?.nome,
       finalidade: form.finalidade, bairro_id: form.bairro_id||null,
-      endereco: form.endereco||null, area: form.area ? parseFloat(form.area) : null,
+      rua: form.rua||null, numero: form.numero||null,
+      complemento: form.complemento||null, cep: form.cep||null,
+      endereco: enderecoCompleto || null, area: form.area ? parseFloat(form.area) : null,
       dorms: form.dorms ? parseInt(form.dorms) : 0, suites: form.suites ? parseInt(form.suites) : 0,
       banhs: form.banhs ? parseInt(form.banhs) : 0, vagas: form.vagas ? parseInt(form.vagas) : 0,
       condominio: form.condominio ? parseFloat(form.condominio) : 0,
@@ -415,8 +421,48 @@ export default function ImoveisPage() {
                     <div className="text-[9px] text-gray-400 mt-0.5">Longitude (ex: -52.7014)</div>
                   </div>
                 </div>
+                {/* Link automático para Google Maps com o endereço */}
+                {(form.rua || form.numero) && (
+                  <a
+                    href={`https://maps.google.com/maps?q=${encodeURIComponent([form.rua, form.numero, form.complemento, form.cep].filter(Boolean).join(', '))}`}
+                    target="_blank" rel="noopener"
+                    className="flex items-center gap-2 text-[10px] text-blue-600 font-semibold mt-2 bg-blue-50 rounded-lg px-3 py-2 border border-blue-100 hover:bg-blue-100 transition-colors"
+                  >
+                    🗺️ Abrir endereço no Google Maps → clique direito → copie as coordenadas
+                  </a>
+                )}
                 <div className="text-[10px] text-gray-400 mt-1.5 bg-gray-50 rounded-lg px-3 py-2 border border-gray-100">
-                  💡 <strong>Como pegar:</strong> Abra o Google Maps → clique direito no endereço → copie as coordenadas
+                  💡 <strong>Passo a passo:</strong> Preencha o endereço acima → clique no link → clique direito no pin → copie Latitude e Longitude
+                </div>
+              </div>
+
+              {/* Endereço completo */}
+              <div className="col-span-2 bg-blue-50 border border-blue-100 rounded-xl p-4">
+                <label className="text-[11px] font-bold text-blue-700 block mb-3">📍 Endereço do Imóvel</label>
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="col-span-2">
+                    <label className="text-[10px] font-bold text-gray-600 block mb-1">Rua / Avenida</label>
+                    <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 bg-white" placeholder="Ex: Rua das Flores" value={form.rua} onChange={inp('rua')}/>
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-gray-600 block mb-1">Número</label>
+                    <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 bg-white" placeholder="Ex: 123" value={form.numero} onChange={inp('numero')}/>
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-gray-600 block mb-1">Complemento</label>
+                    <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 bg-white" placeholder="Apto 42, Bl B..." value={form.complemento} onChange={inp('complemento')}/>
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-gray-600 block mb-1">CEP</label>
+                    <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 bg-white font-mono" placeholder="00000-000" maxLength={9} value={form.cep} onChange={e => {
+                      // Auto-formata CEP
+                      const v = e.target.value.replace(/\D/g,'').slice(0,8)
+                      setForm(f => ({...f, cep: v.length > 5 ? v.slice(0,5)+'-'+v.slice(5) : v}))
+                    }}/>
+                  </div>
+                  <div className="col-span-3 text-[10px] text-blue-600 mt-1">
+                    💡 Endereço completo monta automaticamente para o Google Maps
+                  </div>
                 </div>
               </div>
 
