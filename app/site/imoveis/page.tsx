@@ -1,8 +1,12 @@
 'use client'
+ import BotoesSociais from '@/components/ui/BotoesSociais'
 import { useEffect, useState, useCallback, useRef } from 'react'
+import BotoesFlutuantes from '@/components/ui/BotoesFlutuantes'
 import Image from 'next/image'
+import FloatingButtons from '@/components/ui/FloatingButtons'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import FloatButtons from '@/components/ui/FloatButtons'
 
 const WPP = process.env.NEXT_PUBLIC_WHATSAPP || '5551997901012'
 const FOTOS = [
@@ -60,6 +64,7 @@ function TiposDropdown({ tipos, selected, onChange }: {
         </div>
       )}
     </div>
+      <FloatingButtons />
   )
 }
 
@@ -145,6 +150,8 @@ export default function ImoveisHomePage() {
   const [precoMin, setPrecoMin] = useState('')
   const [precoMax, setPrecoMax] = useState('')
   const [dorms, setDorms] = useState('')
+  const [suitesSel, setSuitesSel] = useState('')
+  const [mobiliado, setMobiliado] = useState('')
   const [vagas, setVagas] = useState('')
   const [areaMin, setAreaMin] = useState('')
   const [areaMax, setAreaMax] = useState('')
@@ -177,6 +184,8 @@ export default function ImoveisHomePage() {
     if (precoMin) list = list.filter(i => i.preco >= parseFloat(precoMin))
     if (precoMax) list = list.filter(i => i.preco <= parseFloat(precoMax))
     if (dorms) list = list.filter(i => (i.dorms||0) >= parseInt(dorms))
+    if (suitesSel) list = list.filter(i => (i.suites||0) >= parseInt(suitesSel))
+    if (mobiliado) list = list.filter(i => i.mobiliado === mobiliado)
     if (vagas) list = list.filter(i => (i.vagas||0) >= parseInt(vagas))
     if (areaMin) list = list.filter(i => (i.area||0) >= parseFloat(areaMin))
     if (areaMax) list = list.filter(i => (i.area||0) <= parseFloat(areaMax))
@@ -226,7 +235,7 @@ export default function ImoveisHomePage() {
 
   function limparTudo() {
     setFinalidade(''); setTiposSel([]); setBairrosSel([]); setCidadesSel([])
-    setPrecoMin(''); setPrecoMax(''); setDorms(''); setVagas(''); setAreaMin(''); setAreaMax(''); setOrdenar('recente')
+    setPrecoMin(''); setPrecoMax(''); setDorms(''); setSuitesSel(''); setVagas(''); setAreaMin(''); setAreaMax(''); setMobiliado(''); setOrdenar('recente')
   }
 
   const temFiltro = !!(finalidade || tiposSel.length || bairrosSel.length || cidadesSel.length || precoMin || precoMax || dorms || vagas || areaMin || areaMax)
@@ -328,6 +337,28 @@ export default function ImoveisHomePage() {
                 </div>
               </div>
               <div>
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-2">Suítes</label>
+                <div className="grid grid-cols-4 gap-1">
+                  {['','1','2','3+'].map(s=>(
+                    <button key={s} onClick={() => setSuitesSel(s==='3+'?'3':s)}
+                      className={`py-2 rounded-lg text-[10px] font-bold border transition-all ${(s==='3+'?suitesSel==='3':suitesSel===s)?'bg-[#0D2137] text-white border-[#0D2137]':'border-gray-200 text-gray-500 hover:border-gray-400'}`}>
+                      {s||'Td'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-2">Mobiliado</label>
+                <div className="flex flex-col gap-1">
+                  {[['','Todos'],['Sim','Mobiliado'],['Semimobiliado','Semimobiliado'],['Não','Não mobiliado']].map(([val,label])=>(
+                    <button key={val} onClick={() => setMobiliado(val)}
+                      className={`py-1.5 px-2 rounded-lg text-[10px] font-bold border transition-all text-left ${mobiliado===val?'bg-[#0D2137] text-white border-[#0D2137]':'border-gray-200 text-gray-500 hover:border-gray-400'}`}>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
                 <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-2">Vagas Garagem</label>
                 <div className="grid grid-cols-4 gap-1">
                   {['','1','2','3+'].map(v=>(
@@ -401,6 +432,7 @@ export default function ImoveisHomePage() {
           )}
         </div>
       </div>
+      <FloatButtons />
     </div>
   )
 }
@@ -420,7 +452,14 @@ function CardImovel({ im, idx }: { im: any; idx: number }) {
         {im.codigo && <div className="absolute bottom-2.5 left-2.5 bg-black/60 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">{im.codigo}</div>}
       </div>
       <div className="p-3.5">
-        <div className="text-[10px] text-gray-500 mb-0.5">{im.tipo}</div>
+        <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
+          <span className="text-[10px] text-gray-500">{im.tipo}</span>
+          {im.mobiliado && im.mobiliado !== 'Não' && (
+            <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${im.mobiliado==='Sim'?'bg-blue-50 text-blue-600':'bg-orange-50 text-orange-600'}`}>
+              🛋️ {im.mobiliado === 'Sim' ? 'Mobiliado' : 'Semimobiliado'}
+            </span>
+          )}
+        </div>
         <div className="font-bold text-base text-gray-900 leading-tight truncate">{im.bairro?.nome||im.titulo}</div>
         <div className="text-xs text-gray-500 mb-2.5">{im.cidade?.nome} - {im.cidade?.estado}</div>
         {(im.area||im.dorms||im.banhs||im.vagas) && (

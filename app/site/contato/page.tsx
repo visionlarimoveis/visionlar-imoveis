@@ -1,6 +1,10 @@
 import Image from 'next/image'
+import FloatingButtons from '@/components/ui/FloatingButtons'
+import BotoesSociais from '@/components/ui/BotoesSociais'
+import BotoesFlutuantes from '@/components/ui/BotoesFlutuantes'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import FloatButtons from '@/components/ui/FloatButtons'
 
 const WPP = process.env.NEXT_PUBLIC_WHATSAPP || '5551997901012'
 
@@ -127,5 +131,6 @@ export default async function ContatoPage() {
         <a href="/adm" className="text-white/15 hover:text-white/50 text-[10px] border border-white/10 px-2.5 py-1 rounded-lg">🔐 Adm</a>
       </footer>
     </div>
+      <FloatingButtons />
   )
 }

@@ -1,9 +1,13 @@
 'use client'
+ import BotoesSociais from '@/components/ui/BotoesSociais'
 import { useEffect, useState } from 'react'
+import BotoesFlutuantes from '@/components/ui/BotoesFlutuantes'
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
+import FloatingButtons from '@/components/ui/FloatingButtons'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import FloatButtons from '@/components/ui/FloatButtons'
 
 const WPP = process.env.NEXT_PUBLIC_WHATSAPP || '5551997901012'
 const FOTOS_DEMO = [
@@ -42,7 +46,7 @@ export default function ImovelPage() {
       setLoading(true)
       const { data } = await supabase
         .from('imoveis')
-        .select('*, cidade:cidades(id,nome,estado), bairro:bairros(id,nome), corretor:corretores(id,nome,creci,telefone)')
+        .select('*, cidade:cidades(id,nome,estado), bairro:bairros(id,nome), corretor:corretores(id,nome,creci,telefone,foto_url)')
         .eq('id', id).single()
       if (!data) { router.push('/site/imoveis'); return }
       setImovel(data)
@@ -210,6 +214,11 @@ export default function ImovelPage() {
                   <div className="flex flex-col items-end gap-1.5 shrink-0">
                     {imovel.codigo&&<span className="bg-[#0D2137] text-white text-[10px] font-bold px-3 py-1.5 rounded-full">Código {imovel.codigo}</span>}
                     {imovel.destaque&&<span className="bg-amber-100 text-amber-800 text-[10px] font-bold px-3 py-1 rounded-full">⭐ Destaque</span>}
+                  {imovel.mobiliado && imovel.mobiliado !== 'Não' && (
+                    <span className={`text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1 ${imovel.mobiliado==='Sim'?'bg-blue-50 text-blue-600':'bg-orange-50 text-orange-600'}`}>
+                      🛋️ {imovel.mobiliado === 'Sim' ? 'Mobiliado' : 'Semimobiliado'}
+                    </span>
+                  )}
                   </div>
                 </div>
                 <div className="mt-4 pt-4 border-t border-gray-100">
