@@ -100,18 +100,45 @@ export default async function ContatoPage() {
 
         <div className="grid grid-cols-1 gap-4 mb-8">
           {itens.map(item => (
-            <div key={item.label} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center gap-5">
-              <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-2xl shrink-0 border border-gray-100">{item.ico}</div>
-              <div className="flex-1 min-w-0">
-                <div className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-0.5">{item.label}</div>
-                <div className="font-bold text-gray-900 text-base">{item.valor}</div>
-                {item.extra && <div className="text-xs text-gray-500 mt-0.5">{item.extra}</div>}
+            <div key={item.label} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+              <div className="p-6 flex items-center gap-5">
+                <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-2xl shrink-0 border border-gray-100">{item.ico}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-0.5">{item.label}</div>
+                  <div className="font-bold text-gray-900 text-base">{item.valor}</div>
+                  {item.extra && <div className="text-xs text-gray-500 mt-0.5">{item.extra}</div>}
+                </div>
+                {item.btn && item.link && (
+                  <a href={item.link} target={item.link.startsWith('http') ? '_blank' : undefined} rel="noopener"
+                    className={`${item.color} text-sm font-bold px-5 py-2.5 rounded-xl transition-colors shrink-0`}>
+                    {item.btn}
+                  </a>
+                )}
+                {item.label === 'LOCALIZAÇÃO' && (
+                  <a
+                    href={`https://maps.google.com/?q=${encodeURIComponent((cfg.endereco || cfg.cidade_sede) + ', Brasil')}`}
+                    target="_blank" rel="noopener"
+                    className="bg-[#0D2137] hover:bg-[#1A3558] text-white text-sm font-bold px-5 py-2.5 rounded-xl transition-colors shrink-0 flex items-center gap-2">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Ver no mapa
+                  </a>
+                )}
               </div>
-              {item.btn && item.link && (
-                <a href={item.link} target={item.link.startsWith('http') ? '_blank' : undefined} rel="noopener"
-                  className={`${item.color} text-sm font-bold px-5 py-2.5 rounded-xl transition-colors shrink-0`}>
-                  {item.btn}
-                </a>
+              {/* Mapa embutido abaixo do card de localização */}
+              {item.label === 'LOCALIZAÇÃO' && (
+                <div className="border-t border-gray-100">
+                  <iframe
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent((cfg.endereco || cfg.cidade_sede) + ', Brasil')}&z=15&output=embed`}
+                    width="100%"
+                    height="280"
+                    style={{ border: 0, display: 'block' }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
               )}
             </div>
           ))}
