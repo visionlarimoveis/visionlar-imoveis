@@ -243,7 +243,7 @@ export default function ImoveisHomePage() {
   const gridCols = sidebarOpen ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">{/* wrapper */}
+    <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">{/* wrapper */}
       {/* NAV */}
       <nav className="bg-[#0D2137] shrink-0 shadow-lg z-50" style={{height:"64px",overflow:"hidden"}}>
         <div className="h-full px-6 flex items-center justify-between">
@@ -313,7 +313,7 @@ export default function ImoveisHomePage() {
       </div>
 
       {/* CORPO */}
-      <div className="flex flex-1 min-h-0">
+      <div className="flex flex-1 overflow-hidden">
         {/* SIDEBAR */}
         <aside className={`bg-white border-r border-gray-200 shrink-0 transition-all duration-300 flex flex-col ${sidebarOpen ? 'w-56' : 'w-0'}`}>
           <div className="flex-1 overflow-y-auto p-4">
@@ -386,7 +386,7 @@ export default function ImoveisHomePage() {
         </aside>
 
         {/* CONTEÚDO */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 overflow-y-auto flex flex-col">
           {view === 'grid' && (
             <div className="p-4">
               {loading ? (
@@ -431,16 +431,17 @@ export default function ImoveisHomePage() {
               </div>
             </div>
           )}
+          {/* FOOTER dentro do scroll */}
+          <footer className="bg-white border-t border-gray-200 py-4 px-6 flex items-center justify-between mt-auto">
+            <span className="text-gray-400 text-[10px]">© {new Date().getFullYear()} Visionlar Consultoria Imobiliária — Corretor de Imóveis CRECI-RS {CRECI}</span>
+            <div className="flex items-center gap-3">
+              <a href="https://midiavision.com.br" target="_blank" rel="noopener" className="text-gray-300 hover:text-gray-500 text-[10px] transition-colors">Desenvolvido por MidiaVision Digital</a>
+              <a href="/adm" className="text-gray-200 hover:text-gray-400 text-[10px] border border-gray-200 px-2.5 py-1 rounded-lg">🔐 Adm</a>
+            </div>
+          </footer>
         </div>
       </div>
       <FloatButtons />
-      <footer className="bg-white border-t border-gray-200 py-4 px-6 flex items-center justify-between">
-        <span className="text-gray-400 text-[10px]">© {new Date().getFullYear()} Visionlar Consultoria Imobiliária — Corretor de Imóveis CRECI-RS {CRECI}</span>
-        <div className="flex items-center gap-3">
-          <a href="https://midiavision.com.br" target="_blank" rel="noopener" className="text-gray-300 hover:text-gray-500 text-[10px] transition-colors">Desenvolvido por MidiaVision Digital</a>
-          <a href="/adm" className="text-gray-200 hover:text-gray-400 text-[10px] border border-gray-200 px-2.5 py-1 rounded-lg">🔐 Adm</a>
-        </div>
-      </footer>
     </div>
   )
 }

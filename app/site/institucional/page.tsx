@@ -142,15 +142,11 @@ export default async function InstitucionalPage() {
                   Ver imóveis →
                 </Link>
               </div>
-              {/* CRECI abaixo dos botões */}
+              {/* CRECI abaixo dos botões — linha horizontal */}
               {cfg.creci && (
-                <div className="mt-4 inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-xl px-4 py-2">
-                  <div className="w-0.5 h-6 bg-[#B8892A] rounded-full shrink-0"/>
-                  <div>
-                    <div className="text-white/50 text-[9px] uppercase tracking-widest font-semibold">Corretor de Imóveis</div>
-                    <div className="text-[#D4A843] text-sm font-bold">CRECI-RS {cfg.creci}</div>
-                  </div>
-                </div>
+                <p className="mt-4 text-white/50 text-xs font-semibold">
+                  Corretor de Imóveis CRECI-RS {cfg.creci}
+                </p>
               )}
             </div>
             {/* Badge logo */}
