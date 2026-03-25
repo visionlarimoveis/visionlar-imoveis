@@ -13,7 +13,7 @@ async function getConfig() {
     const { data } = await supabase
       .from('configuracoes')
       .select('chave, valor')
-    if (!data) return { telefone: '(51) 9 9790-1012', email: 'contato@visionlarimovies.com.br', cidade_sede: 'Candelária - RS', whatsapp: WPP }
+    if (!data) return { telefone: '(51) 9 9790-1012', email: 'contato@visionlarimovies.com.br', cidade_sede: 'Candelária - RS', whatsapp: WPP, creci: '44.627' }
     const cfg: Record<string, string> = {}
     data.forEach((r: any) => { cfg[r.chave] = r.valor })
     return {
@@ -22,9 +22,10 @@ async function getConfig() {
       cidade_sede: cfg.cidade_sede || 'Candelária - RS',
       whatsapp: cfg.whatsapp || WPP,
       endereco: cfg.endereco || '',
+      creci: cfg.creci || '44.627',
     }
   } catch {
-    return { telefone: '(51) 9 9790-1012', email: 'contato@visionlarimovies.com.br', cidade_sede: 'Candelária - RS', whatsapp: WPP, endereco: '' }
+    return { telefone: '(51) 9 9790-1012', email: 'contato@visionlarimovies.com.br', cidade_sede: 'Candelária - RS', whatsapp: WPP, endereco: '', creci: '44.627' }
   }
 }
 
