@@ -315,7 +315,7 @@ export default function ImoveisHomePage() {
       {/* CORPO */}
       <div className="flex flex-1 overflow-hidden">
         {/* SIDEBAR */}
-        <aside className={`bg-white border-r border-gray-200 shrink-0 transition-all duration-300 flex flex-col ${sidebarOpen ? 'w-56' : 'w-0'}`}>
+        <aside className={`bg-white border-r border-gray-200 shrink-0 transition-all duration-300 overflow-hidden flex flex-col ${sidebarOpen ? 'w-56' : 'w-0'}`}>
           <div className="flex-1 overflow-y-auto p-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider">Filtros avançados</h3>
