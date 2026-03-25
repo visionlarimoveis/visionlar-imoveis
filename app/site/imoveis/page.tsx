@@ -273,71 +273,6 @@ export default function ImoveisHomePage() {
         </div>
       </nav>
 
-      {/* ── BANNER DESTAQUES ── */}
-      {destaques.length > 0 && (
-        <div className="relative shrink-0 overflow-hidden" style={{height: '340px'}}>
-          {destaques.map((im, idx) => {
-            const foto = im.foto_url || FOTOS[idx % FOTOS.length]
-            const ativo = idx === bannerIdx
-            return (
-              <div key={im.id}
-                className="absolute inset-0 transition-opacity duration-700"
-                style={{ opacity: ativo ? 1 : 0, zIndex: ativo ? 1 : 0 }}>
-                <img src={foto} alt={im.titulo}
-                  className="w-full h-full object-cover"
-                  onError={e => { (e.target as any).src = FOTOS[0] }} />
-                {/* Overlay gradiente */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                {/* Info do imóvel */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 flex items-end justify-between">
-                  <div>
-                    {im.codigo && <span className="bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold px-2.5 py-1 rounded-full mb-2 inline-block">{im.codigo}</span>}
-                    <h2 className="text-white font-bold text-2xl leading-tight drop-shadow-lg" style={{fontFamily:'Playfair Display,serif'}}>
-                      {im.titulo}
-                    </h2>
-                    <p className="text-white/75 text-sm mt-1">
-                      📍 {im.bairro?.nome && `${im.bairro.nome} — `}{im.cidade?.nome} - {im.cidade?.estado}
-                    </p>
-                    <p className="text-[#D4A843] font-bold text-xl mt-1" style={{fontFamily:'Playfair Display,serif'}}>
-                      {im.preco >= 1e6 ? `R$ ${(im.preco/1e6).toFixed(1).replace('.',',')}M` : im.preco >= 1e3 ? `R$ ${(im.preco/1e3).toFixed(0)}k` : `R$ ${im.preco?.toLocaleString('pt-BR')}`}
-                      {im.finalidade === 'Aluguel' && <span className="text-sm font-normal text-white/60">/mês</span>}
-                    </p>
-                  </div>
-                  <button onClick={() => window.location.href=`/site/imoveis/${im.id}`}
-                    className="bg-[#B8892A] hover:bg-[#D4A843] text-[#0D2137] font-bold px-5 py-2.5 rounded-xl text-sm transition-colors shrink-0 shadow-lg">
-                    Ver imóvel →
-                  </button>
-                </div>
-              </div>
-            )
-          })}
-          {/* Setas de navegação */}
-          {destaques.length > 1 && (
-            <>
-              <button onClick={() => setBannerIdx(i => (i - 1 + destaques.length) % destaques.length)}
-                className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition-colors">
-                ‹
-              </button>
-              <button onClick={() => setBannerIdx(i => (i + 1) % destaques.length)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition-colors">
-                ›
-              </button>
-              {/* Dots */}
-              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
-                {destaques.map((_, i) => (
-                  <button key={i} onClick={() => setBannerIdx(i)}
-                    className={`rounded-full transition-all ${i === bannerIdx ? 'w-5 h-2 bg-[#B8892A]' : 'w-2 h-2 bg-white/50 hover:bg-white/80'}`} />
-                ))}
-              </div>
-            </>
-          )}
-          {/* Badge destaque */}
-          <div className="absolute top-4 right-4 z-10 bg-[#B8892A] text-white text-[10px] font-black px-3 py-1 rounded-full shadow">
-            ★ Destaque
-          </div>
-        </div>
-      )}
-
       {/* BARRA BUSCA SIMPLES */}
       <div className="bg-white border-b border-gray-200 shadow-sm shrink-0 z-40">
         <div className="flex items-center gap-3 px-4 py-3 flex-wrap">
@@ -462,6 +397,55 @@ export default function ImoveisHomePage() {
 
         {/* CONTEÚDO */}
         <div className="flex-1 overflow-y-auto flex flex-col">
+          {/* ── BANNER DESTAQUES ── */}
+          {destaques.length > 0 && (
+            <div className="relative overflow-hidden shrink-0" style={{height: '340px'}}>
+              {destaques.map((im, idx) => {
+                const foto = im.foto_url || FOTOS[idx % FOTOS.length]
+                const ativo = idx === bannerIdx
+                return (
+                  <div key={im.id}
+                    className="absolute inset-0 transition-opacity duration-700"
+                    style={{ opacity: ativo ? 1 : 0, zIndex: ativo ? 1 : 0 }}>
+                    <img src={foto} alt={im.titulo}
+                      className="w-full h-full object-cover"
+                      onError={e => { (e.target as any).src = FOTOS[0] }} />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-6 flex items-end justify-between">
+                      <div>
+                        {im.codigo && <span className="bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold px-2.5 py-1 rounded-full mb-2 inline-block">{im.codigo}</span>}
+                        <h2 className="text-white font-bold text-2xl leading-tight drop-shadow-lg" style={{fontFamily:'Playfair Display,serif'}}>{im.titulo}</h2>
+                        <p className="text-white/75 text-sm mt-1">📍 {im.bairro?.nome && `${im.bairro.nome} — `}{im.cidade?.nome} - {im.cidade?.estado}</p>
+                        <p className="text-[#D4A843] font-bold text-xl mt-1" style={{fontFamily:'Playfair Display,serif'}}>
+                          {im.preco >= 1e6 ? `R$ ${(im.preco/1e6).toFixed(1).replace('.',',')}M` : im.preco >= 1e3 ? `R$ ${(im.preco/1e3).toFixed(0)}k` : `R$ ${im.preco?.toLocaleString('pt-BR')}`}
+                          {im.finalidade === 'Aluguel' && <span className="text-sm font-normal text-white/60">/mês</span>}
+                        </p>
+                      </div>
+                      <button onClick={() => window.location.href=`/site/imoveis/${im.id}`}
+                        className="bg-[#B8892A] hover:bg-[#D4A843] text-[#0D2137] font-bold px-5 py-2.5 rounded-xl text-sm transition-colors shrink-0 shadow-lg">
+                        Ver imóvel →
+                      </button>
+                    </div>
+                  </div>
+                )
+              })}
+              {destaques.length > 1 && (
+                <>
+                  <button onClick={() => setBannerIdx(i => (i - 1 + destaques.length) % destaques.length)}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition-colors">‹</button>
+                  <button onClick={() => setBannerIdx(i => (i + 1) % destaques.length)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition-colors">›</button>
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
+                    {destaques.map((_, i) => (
+                      <button key={i} onClick={() => setBannerIdx(i)}
+                        className={`rounded-full transition-all ${i === bannerIdx ? 'w-5 h-2 bg-[#B8892A]' : 'w-2 h-2 bg-white/50 hover:bg-white/80'}`} />
+                    ))}
+                  </div>
+                </>
+              )}
+              <div className="absolute top-4 right-4 z-10 bg-[#B8892A] text-white text-[10px] font-black px-3 py-1 rounded-full shadow">★ Destaque</div>
+            </div>
+          )}
           {view === 'grid' && (
             <div className="p-4">
               {loading ? (
