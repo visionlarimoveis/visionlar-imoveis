@@ -129,9 +129,6 @@ export default async function InstitucionalPage() {
               </h1>
               <p className="text-white/65 leading-relaxed text-base max-w-xl">
                 {cfg.sobre || 'A Visionlar Consultoria Imobiliária é uma empresa especializada em intermediação imobiliária, com foco em proporcionar uma experiência segura, transparente e eficiente para quem deseja comprar ou vender imóveis.'}
-                <p className="text-white/70 leading-relaxed text-sm mt-3 max-w-xl font-semibold">
-                  Corretor de Imóveis CRECI-RS 44.627-F
-                </p>
               </p>
               <div className="flex flex-wrap gap-3 mt-8">
                 <a href={`https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de falar com um especialista da Visionlar Consultoria Imobiliária.')}`}
@@ -341,7 +338,7 @@ export default async function InstitucionalPage() {
       {/* ── FOOTER ── */}
       <footer className="bg-[#0D2137] py-4 px-6 flex items-center justify-between mt-4">
         <span className="text-white/25 text-[10px]">
-          © {anoAtual} Visionlar Consultoria Imobiliária{cfg.creci ? ` — Corretor de Imóveis CRECI-RS ${cfg.creci.replace(/-F$/i, '')}-F` : ''}
+          © {anoAtual} Visionlar Consultoria Imobiliária{cfg.creci ? ` — Corretor de Imóveis CRECI-RS ${cfg.creci}` : ''}
         </span>
         <div className="flex items-center gap-3">
           <a href="https://midiavision.com.br" target="_blank" rel="noopener" className="text-white/20 hover:text-white/50 text-[10px] transition-colors">Desenvolvido por MidiaVision Digital</a>
