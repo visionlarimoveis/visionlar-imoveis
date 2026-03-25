@@ -125,7 +125,7 @@ export default function ImovelPage() {
         <nav className="bg-[#0D2137] sticky top-0 z-40 shadow-lg" style={{height:"64px",overflow:"hidden"}}>
           <div className="h-full px-6 flex items-center justify-between">
             <Link href="/site/imoveis">
-              <Image src="/logo.png" alt="VisionLar" width={130} height={44} className="object-contain" />
+              <Image src="/logo.png" alt="Visionlar Consultoria Imobiliária" width={130} height={44} className="object-contain" />
             </Link>
             <div className="hidden md:flex gap-1">
               {([['Imóveis','/site/imoveis'],['Institucional','/site/institucional'],['Contato','/site/contato']] as [string,string][]).map(([l,h])=>(

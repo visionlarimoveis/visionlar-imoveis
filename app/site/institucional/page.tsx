@@ -64,10 +64,10 @@ export default async function InstitucionalPage() {
   const anosExperiencia = anoAtual - parseInt(cfg.ano_fundacao || '2020')
 
   const numeros = [
-    { valor: '100%',      label: 'Dedicação ao cliente'   },
-    { valor: 'CRECI-RS',  label: cfg.creci ? `${cfg.creci}-F` : 'Certificado' },
-    { valor: '0 taxa',    label: 'Surpresas na negociação' },
-    { valor: '360°',      label: 'Suporte do início ao fim' },
+    { valor: '100%',          label: 'Dedicação ao cliente'    },
+    { valor: 'Atendimento',   label: 'Personalizado'           },
+    { valor: 'Foco Total',    label: 'em Resultados'           },
+    { valor: 'Transparência', label: 'em cada negociação'      },
   ]
 
   const valores = [
@@ -93,7 +93,7 @@ export default async function InstitucionalPage() {
       <nav className="bg-[#0D2137] sticky top-0 z-50 shadow-lg" style={{ height: '64px', overflow: 'hidden' }}>
         <div className="h-full px-6 flex items-center justify-between">
           <Link href="/site/imoveis">
-            <Image src="/logo.png" alt="VisionLar" width={130} height={44} className="object-contain" />
+            <Image src="/logo.png" alt="Visionlar Consultoria Imobiliária" width={130} height={44} className="object-contain" />
           </Link>
           <div className="hidden md:flex gap-1">
             {([['Imóveis', '/site/imoveis'], ['Institucional', '/site/institucional'], ['Contato', '/site/contato']] as [string, string][]).map(([l, h]) => (
@@ -142,16 +142,10 @@ export default async function InstitucionalPage() {
                 </Link>
               </div>
             </div>
-            {/* Badge CRECI + logo */}
+            {/* Badge logo */}
             <div className="shrink-0 flex flex-col items-center gap-4">
               <div className="bg-white rounded-2xl p-6 shadow-2xl text-center w-48">
-                <Image src="/logo.png" alt="VisionLar" width={120} height={44} className="object-contain mx-auto mb-4" />
-                {cfg.creci && (
-                  <>
-                    <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Corretor de Imóveis</div>
-                    <div className="text-[#0D2137] font-bold text-sm mt-0.5">CRECI-RS {cfg.creci}-F</div>
-                  </>
-                )}
+                <Image src="/logo.png" alt="Visionlar" width={120} height={44} className="object-contain mx-auto" />
               </div>
             </div>
           </div>
