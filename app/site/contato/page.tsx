@@ -137,7 +137,7 @@ export default async function ContatoPage() {
           <a href="/adm" className="text-white/15 hover:text-white/50 text-[10px] border border-white/10 px-2.5 py-1 rounded-lg">🔐 Adm</a>
         </div>
       </footer>
-
+      <FloatButtons size="md" />
     </div>
   )
 }

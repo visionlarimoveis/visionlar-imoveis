@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import FloatButtons from '@/components/ui/FloatButtons'
+import FloatButtonsCreci from '@/components/ui/FloatButtonsCreci'
 import { supabase } from '@/lib/supabase'
 
 export const revalidate = 0 // sempre busca dados frescos do Supabase
@@ -346,7 +346,7 @@ export default async function InstitucionalPage() {
         </div>
       </footer>
 
-      <FloatButtons />
+      <FloatButtonsCreci />
     </div>
   )
 }
