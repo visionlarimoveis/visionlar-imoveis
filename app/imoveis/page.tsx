@@ -259,7 +259,6 @@ export default function ImoveisPage() {
       condominio: String(im.condominio||''), descricao: im.descricao||'',
       foto_url: im.foto_url||'', fotos: im.fotos||[],
       latitude: String(im.latitude||''), longitude: String(im.longitude||''), mobiliado: im.mobiliado||'Não',
-      mobiliado: im.mobiliado||'Não',
       status: im.status||'Ativo', destaque: im.destaque||false, corretor_id: im.corretor_id||'',
     })
     setModalOpen(true)
@@ -289,7 +288,6 @@ export default function ImoveisPage() {
       descricao: form.descricao||null, foto_url: fotoFinal,
       fotos: form.fotos, status: form.status, destaque: form.destaque,
       mobiliado: form.mobiliado||'Não',
-      mobiliado: form.mobiliado || 'Não',
       latitude: form.latitude ? parseFloat(form.latitude) : null,
       longitude: form.longitude ? parseFloat(form.longitude) : null,
       corretor_id: form.corretor_id||null,
@@ -478,8 +476,7 @@ export default function ImoveisPage() {
               <div><label className="text-[11px] font-bold text-gray-700 block mb-1">Corretor</label><select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 bg-white" value={form.corretor_id} onChange={inp('corretor_id')}><option value="">Sem corretor</option>{corretores.map(c => <option key={c.id} value={c.id}>{c.nome}</option>)}</select></div>
               <div><label className="text-[11px] font-bold text-gray-700 block mb-1">Status</label><select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 bg-white" value={form.status} onChange={inp('status')}><option>Ativo</option><option>Inativo</option><option>Vendido</option><option>Alugado</option></select></div>
               <div><label className="text-[11px] font-bold text-gray-700 block mb-1">Destaque?</label><select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 bg-white" value={form.destaque?'1':'0'} onChange={e => setForm(f => ({...f, destaque: e.target.value==='1'}))}><option value="0">Não</option><option value="1">Sim</option></select></div>
-              <div><label className="text-[11px] font-bold text-gray-700 block mb-1">Mobiliado</label><select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 bg-white" value={form.mobiliado} onChange={inp('mobiliado')}><option value="Não">Não mobiliado</option><option value="Semimobiliado">Semimobiliado</option><option value="Sim">Mobiliado</option></select></div>
-              <div><label className="text-[11px] font-bold text-gray-700 block mb-1">🛋️ Mobiliado</label><select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 bg-white" value={form.mobiliado} onChange={inp('mobiliado' as any)}><option value="Não">Não mobiliado</option><option value="Semimobiliado">Semimobiliado</option><option value="Sim">Mobiliado</option></select></div>
+              <div><label className="text-[11px] font-bold text-gray-700 block mb-1">🛋️ Mobiliado</label><select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 bg-white" value={form.mobiliado} onChange={inp('mobiliado')}><option value="Não">Não mobiliado</option><option value="Semimobiliado">Semimobiliado</option><option value="Sim">Mobiliado</option></select></div>
               <div className="col-span-2"><label className="text-[11px] font-bold text-gray-700 block mb-1">Descrição</label><textarea className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 resize-y min-h-[70px]" value={form.descricao} onChange={inp('descricao')}/></div>
 
               {/* Upload de fotos */}
