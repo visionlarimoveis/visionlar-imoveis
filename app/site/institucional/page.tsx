@@ -127,7 +127,10 @@ export default async function InstitucionalPage() {
                 <span className="text-[#D4A843]">um imóvel por vez</span>
               </h1>
               <p className="text-white/65 leading-relaxed text-base max-w-xl">
-                {cfg.sobre || 'A Visionlar Consultoria Imobiliária é uma empresa especializada em intermediação imobiliária, com foco em proporcionar uma experiência segura, transparente e eficiente para quem deseja comprar, vender ou alugar imóveis na região.'}
+                {cfg.sobre || 'A Visionlar Consultoria Imobiliária é uma empresa especializada em intermediação imobiliária, com foco em proporcionar uma experiência segura, transparente e eficiente para quem deseja comprar ou vender imóveis.'}
+                <p className="text-white/70 leading-relaxed text-sm mt-3 max-w-xl font-semibold">
+                  Corretor de Imóveis CRECI-RS 44.627-F
+                </p>
               </p>
               <div className="flex flex-wrap gap-3 mt-8">
                 <a href={`https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de falar com um especialista da Visionlar Consultoria Imobiliária.')}`}
@@ -187,7 +190,7 @@ export default async function InstitucionalPage() {
               {
                 ico: '🔭', cor: 'bg-amber-50 border-amber-100',
                 titulo: 'Visão',
-                desc: 'Ser a imobiliária de referência na região, reconhecida pela excelência no atendimento e pela confiança construída com cada cliente.',
+                desc: 'Ser a Consultoria Imobiliária de referência na região, reconhecida pela excelência no atendimento e pela confiança construída com cada cliente.',
               },
               {
                 ico: '💎', cor: 'bg-emerald-50 border-emerald-100',
