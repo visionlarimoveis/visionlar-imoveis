@@ -343,9 +343,12 @@ export default async function InstitucionalPage() {
       {/* ── FOOTER ── */}
       <footer className="bg-[#0D2137] py-4 px-6 flex items-center justify-between mt-4">
         <span className="text-white/25 text-[10px]">
-          © {anoAtual} {cfg.nome}{cfg.creci ? ` — Corretor de Imóveis CRECI-RS ${cfg.creci}-F` : ''}
+          © {anoAtual} Visionlar Consultoria Imobiliária{cfg.creci ? ` — Corretor de Imóveis CRECI-RS ${cfg.creci.replace(/-F$/i, '')}-F` : ''}
         </span>
-        <a href="/adm" className="text-white/15 hover:text-white/50 text-[10px] border border-white/10 px-2.5 py-1 rounded-lg">🔐 Adm</a>
+        <div className="flex items-center gap-3">
+          <a href="https://midiavision.com.br" target="_blank" rel="noopener" className="text-white/20 hover:text-white/50 text-[10px] transition-colors">Desenvolvido por MidiaVision Digital</a>
+          <a href="/adm" className="text-white/15 hover:text-white/50 text-[10px] border border-white/10 px-2.5 py-1 rounded-lg">🔐 Adm</a>
+        </div>
       </footer>
 
       <FloatButtons />
