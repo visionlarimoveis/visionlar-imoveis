@@ -10,6 +10,7 @@ import { supabase } from '@/lib/supabase'
 import FloatButtons from '@/components/ui/FloatButtons'
 
 const WPP = process.env.NEXT_PUBLIC_WHATSAPP || '5551997901012'
+const CRECI = process.env.NEXT_PUBLIC_CRECI || '44.627'
 const FOTOS_DEMO = [
   'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1200&q=90',
   'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=85',
@@ -304,7 +305,7 @@ export default function ImovelPage() {
               </div>
               <div className="bg-[#0D2137] rounded-2xl p-4 text-center">
                 <div className="text-white/60 text-xs mb-2">Tem um imóvel para vender?</div>
-                <a href={`https://wa.me/${WPP}?text=${encodeURIComponent('Olá! Gostaria de anunciar meu imóvel com a VisionLar.')}`} target="_blank" rel="noopener"
+                <a href={`https://wa.me/${WPP}?text=${encodeURIComponent('Olá! Gostaria de anunciar meu imóvel com a Visionlar Consultoria Imobiliária.')}`} target="_blank" rel="noopener"
                   className="inline-block bg-[#B8892A] text-[#0D2137] text-xs font-bold px-4 py-2 rounded-lg hover:bg-[#D4A843]">Anuncie conosco</a>
               </div>
             </div>
@@ -343,7 +344,7 @@ export default function ImovelPage() {
           )}
         </div>
         <footer className="bg-[#0D2137] mt-12 py-4 px-6 flex items-center justify-between">
-          <span className="text-white/25 text-[10px]">© 2025 VisionLar Imóveis</span>
+          <span className="text-white/25 text-[10px]">© {new Date().getFullYear()} Visionlar Consultoria Imobiliária — Corretor de Imóveis CRECI-RS {CRECI}-F</span>
           <a href="/adm" className="text-white/15 hover:text-white/50 text-[10px] border border-white/10 px-2.5 py-1 rounded-lg">🔐 Adm</a>
         </footer>
       <FloatingButtons />
@@ -423,4 +424,4 @@ export default function ImovelPage() {
       )}
     </>
   )
-}
+}

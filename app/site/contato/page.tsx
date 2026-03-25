@@ -41,7 +41,7 @@ function Nav() {
             <Link key={l} href={h} className="text-white/70 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-medium transition-all">{l}</Link>
           ))}
         </div>
-        <a href={`https://wa.me/${WPP}?text=${encodeURIComponent('Olá! Vim pelo site da VisionLar Imóveis.')}`} target="_blank" rel="noopener"
+        <a href={`https://wa.me/${WPP}?text=${encodeURIComponent('Olá! Vim pelo site da Visionlar Consultoria Imobiliária.')}`} target="_blank" rel="noopener"
           className="bg-[#B8892A] text-[#0D2137] px-5 py-2 rounded-xl text-sm font-bold hover:bg-[#D4A843] transition-colors flex items-center gap-1.5">
           <svg width="14" height="14" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 2C6.477 2 2 6.484 2 12.017c0 1.867.486 3.622 1.338 5.147L2 22l4.975-1.302A10 10 0 0012 22c5.523 0 10-4.487 10-10C22 6.48 17.522 2 12 2z"/></svg>
           WhatsApp
@@ -53,13 +53,14 @@ function Nav() {
 
 export default async function ContatoPage() {
   const cfg = await getConfig()
+  const anoAtual = new Date().getFullYear()
 
   const itens = [
     {
       ico: '📲',
       label: 'WHATSAPP',
       valor: cfg.telefone,
-      link: `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de falar com a VisionLar Imóveis.')}`,
+      link: `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de falar com a Visionlar Consultoria Imobiliária.')}`,
       btn: 'Enviar mensagem',
       color: 'bg-green-500 hover:bg-green-600 text-white',
     },
@@ -118,7 +119,7 @@ export default async function ContatoPage() {
             Anuncie seu imóvel conosco
           </h2>
           <p className="text-[#0D2137]/70 text-sm mb-5">Avaliação gratuita e divulgação nos melhores canais.</p>
-          <a href={`https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de anunciar meu imóvel com a VisionLar.')}`}
+          <a href={`https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de anunciar meu imóvel com a Visionlar Consultoria Imobiliária.')}`}
             target="_blank" rel="noopener"
             className="inline-flex items-center gap-2 bg-[#0D2137] text-white px-7 py-3 rounded-xl font-bold hover:bg-[#132844] transition-colors">
             📲 Solicitar avaliação gratuita
@@ -127,10 +128,10 @@ export default async function ContatoPage() {
       </div>
 
       <footer className="bg-[#0D2137] py-4 px-6 flex items-center justify-between mt-8">
-        <span className="text-white/25 text-[10px]">© 2025 VisionLar Imóveis</span>
+        <span className="text-white/25 text-[10px]">© {anoAtual} Visionlar Consultoria Imobiliária{cfg.creci ? ` — Corretor de Imóveis CRECI-RS ${cfg.creci}-F` : ''}</span>
         <a href="/adm" className="text-white/15 hover:text-white/50 text-[10px] border border-white/10 px-2.5 py-1 rounded-lg">🔐 Adm</a>
       </footer>
       <FloatingButtons />
     </div>
   )
-}
+}

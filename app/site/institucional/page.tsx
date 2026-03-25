@@ -13,7 +13,7 @@ async function getConfig() {
     data.forEach((r: any) => { cfg[r.chave] = r.valor })
     return {
       creci:       cfg.creci       || '',
-      nome:        cfg.nome        || 'VisionLar Imóveis',
+      nome:        cfg.nome        || 'Visionlar Consultoria Imobiliária',
       sobre:       cfg.sobre       || '',
       cidade_sede: cfg.cidade_sede || '',
       whatsapp:    cfg.whatsapp    || WPP,
@@ -29,7 +29,7 @@ async function getConfig() {
 
 function defaults() {
   return {
-    creci: '', nome: 'VisionLar Imóveis', sobre: '', cidade_sede: '',
+    creci: '', nome: 'Visionlar Consultoria Imobiliária', sobre: '', cidade_sede: '',
     whatsapp: WPP, email: '', telefone: '', endereco: '',
     instagram: '', facebook: '', ano_fundacao: '2020',
   }
@@ -64,10 +64,10 @@ export default async function InstitucionalPage() {
   const anosExperiencia = anoAtual - parseInt(cfg.ano_fundacao || '2020')
 
   const numeros = [
-    { valor: `${stats.imoveis}+`,         label: 'Imóveis ativos'      },
-    { valor: `${stats.clientes}+`,         label: 'Clientes atendidos'  },
-    { valor: `${anosExperiencia}+`,        label: 'Anos de experiência' },
-    { valor: `${corretores.length || 1}+`, label: 'Corretores'          },
+    { valor: '100%',      label: 'Dedicação ao cliente'   },
+    { valor: 'CRECI-RS',  label: cfg.creci ? `${cfg.creci}-F` : 'Certificado' },
+    { valor: '0 taxa',    label: 'Surpresas na negociação' },
+    { valor: '360°',      label: 'Suporte do início ao fim' },
   ]
 
   const valores = [
@@ -100,7 +100,7 @@ export default async function InstitucionalPage() {
               <Link key={l} href={h} className="text-white/70 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-medium transition-all">{l}</Link>
             ))}
           </div>
-          <a href={`https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent('Olá! Vim pelo site da VisionLar Imóveis.')}`}
+          <a href={`https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent('Olá! Vim pelo site da Visionlar Consultoria Imobiliária.')}`}
             target="_blank" rel="noopener"
             className="bg-[#B8892A] text-[#0D2137] px-5 py-2 rounded-xl text-sm font-bold hover:bg-[#D4A843] transition-colors flex items-center gap-1.5">
             <svg width="14" height="14" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z" /><path d="M12 2C6.477 2 2 6.484 2 12.017c0 1.867.486 3.622 1.338 5.147L2 22l4.975-1.302A10 10 0 0012 22c5.523 0 10-4.487 10-10C22 6.48 17.522 2 12 2z" /></svg>
@@ -127,10 +127,10 @@ export default async function InstitucionalPage() {
                 <span className="text-[#D4A843]">um imóvel por vez</span>
               </h1>
               <p className="text-white/65 leading-relaxed text-base max-w-xl">
-                {cfg.sobre || 'A VisionLar Imóveis é uma empresa especializada em intermediação imobiliária, com foco em proporcionar uma experiência segura, transparente e eficiente para quem deseja comprar, vender ou alugar imóveis na região.'}
+                {cfg.sobre || 'A Visionlar Consultoria Imobiliária é uma empresa especializada em intermediação imobiliária, com foco em proporcionar uma experiência segura, transparente e eficiente para quem deseja comprar, vender ou alugar imóveis na região.'}
               </p>
               <div className="flex flex-wrap gap-3 mt-8">
-                <a href={`https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de falar com um especialista da VisionLar.')}`}
+                <a href={`https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de falar com um especialista da Visionlar Consultoria Imobiliária.')}`}
                   target="_blank" rel="noopener"
                   className="inline-flex items-center gap-2 bg-green-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-600 transition-colors shadow-lg text-sm">
                   <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z" /><path d="M12 2C6.477 2 2 6.484 2 12.017c0 1.867.486 3.622 1.338 5.147L2 22l4.975-1.302A10 10 0 0012 22c5.523 0 10-4.487 10-10C22 6.48 17.522 2 12 2z" /></svg>
@@ -148,8 +148,8 @@ export default async function InstitucionalPage() {
                 <Image src="/logo.png" alt="VisionLar" width={120} height={44} className="object-contain mx-auto mb-4" />
                 {cfg.creci && (
                   <>
-                    <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">CRECI-RS</div>
-                    <div className="text-[#0D2137] font-bold text-xl mt-0.5" style={{ fontFamily: 'Playfair Display, serif' }}>{cfg.creci}</div>
+                    <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Corretor de Imóveis</div>
+                    <div className="text-[#0D2137] font-bold text-sm mt-0.5">CRECI-RS {cfg.creci}-F</div>
                   </>
                 )}
               </div>
@@ -259,7 +259,7 @@ export default async function InstitucionalPage() {
               {corretores.map((c: any) => {
                 const iniciais = c.nome.split(' ').slice(0, 2).map((n: string) => n[0]).join('')
                 const wppCorretor = c.telefone
-                  ? `https://wa.me/55${c.telefone.replace(/\D/g, '')}?text=${encodeURIComponent(`Olá ${c.nome}! Vi seu perfil no site da VisionLar Imóveis.`)}`
+                  ? `https://wa.me/55${c.telefone.replace(/\D/g, '')}?text=${encodeURIComponent(`Olá ${c.nome}! Vi seu perfil no site da Visionlar Consultoria Imobiliária.`)}`
                   : `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(`Olá! Quero falar com o corretor ${c.nome}.`)}`
                 return (
                   <div key={c.id} className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all text-center">
@@ -304,7 +304,7 @@ export default async function InstitucionalPage() {
               Nossa equipe está disponível para te ajudar a encontrar o imóvel ideal ou a vender o seu pelo melhor preço.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              <a href={`https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de falar com um especialista da VisionLar.')}`}
+              <a href={`https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de falar com um especialista da Visionlar Consultoria Imobiliária.')}`}
                 target="_blank" rel="noopener"
                 className="inline-flex items-center gap-2 bg-green-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-green-600 transition-colors shadow-lg">
                 📲 Falar no WhatsApp
@@ -343,7 +343,7 @@ export default async function InstitucionalPage() {
       {/* ── FOOTER ── */}
       <footer className="bg-[#0D2137] py-4 px-6 flex items-center justify-between mt-4">
         <span className="text-white/25 text-[10px]">
-          © {anoAtual} {cfg.nome}{cfg.creci ? ` — CRECI-RS ${cfg.creci}` : ''}
+          © {anoAtual} {cfg.nome}{cfg.creci ? ` — Corretor de Imóveis CRECI-RS ${cfg.creci}-F` : ''}
         </span>
         <a href="/adm" className="text-white/15 hover:text-white/50 text-[10px] border border-white/10 px-2.5 py-1 rounded-lg">🔐 Adm</a>
       </footer>
