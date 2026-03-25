@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import FloatButtons from '@/components/ui/FloatButtons'
 
+export const revalidate = 0 // sempre busca dados frescos do Supabase
+
 const WPP = process.env.NEXT_PUBLIC_WHATSAPP || '5551997901012'
 
 async function getConfig() {

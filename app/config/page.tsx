@@ -15,14 +15,14 @@ type Config = {
 }
 
 const defaults: Config = {
-  nome: 'VisionLar Imóveis',
+  nome: 'Visionlar Consultoria Imobiliária',
   creci: '',
   whatsapp: '5551997901012',
   email: 'contato@visionlarimovies.com.br',
   telefone: '(51) 9 9790-1012',
   cidade_sede: 'Candelária - RS',
   endereco: '',
-  sobre: 'A VisionLar Imóveis é uma empresa especializada em intermediação imobiliária.',
+  sobre: 'A Visionlar Consultoria Imobiliária é uma empresa especializada em intermediação imobiliária, com foco em proporcionar uma experiência segura, transparente e eficiente para quem deseja comprar ou vender imóveis.',
   senha_adm: 'visionlar2025',
 }
 
