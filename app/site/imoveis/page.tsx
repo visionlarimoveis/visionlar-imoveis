@@ -488,4 +488,4 @@ function CardImovel({ im, idx }: { im: any; idx: number }) {
       </div>
     </div>
   )
-}
+}

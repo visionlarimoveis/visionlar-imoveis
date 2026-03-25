@@ -133,4 +133,4 @@ export default async function ContatoPage() {
       <FloatingButtons />
     </div>
   )
-}
+}
