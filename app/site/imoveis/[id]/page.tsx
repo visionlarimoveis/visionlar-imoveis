@@ -87,9 +87,11 @@ export default function ImovelPage() {
   useEffect(() => {
     if (lightboxIdx === null) return
     const fn = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') setLightboxIdx(i => i !== null ? Math.max(0, i-1) : null)
-      if (e.key === 'ArrowRight') setLightboxIdx(i => i !== null ? Math.min(galeria.length-1, i+1) : null)
+      if (lightboxIdx === -1) { if (e.key === 'Escape') setLightboxIdx(null); return }
+      if (e.key === 'ArrowLeft') setLightboxIdx(i => i !== null && i > 0 ? i-1 : i)
+      if (e.key === 'ArrowRight') setLightboxIdx(i => i !== null && i < galeria.length-1 ? i+1 : i)
       if (e.key === 'Escape') setLightboxIdx(null)
+      if (e.key === 'g' || e.key === 'G') setLightboxIdx(-1)
     }
     window.addEventListener('keydown', fn)
     return () => window.removeEventListener('keydown', fn)
@@ -163,7 +165,7 @@ export default function ImovelPage() {
               {/* Botões */}
               <div className="absolute bottom-4 left-4 flex gap-2">
                 <button
-                  onClick={e => { e.stopPropagation(); openLightbox(0) }}
+                  onClick={e => { e.stopPropagation(); setLightboxIdx(-1) }}
                   className="bg-black/65 backdrop-blur-sm text-white text-xs font-semibold px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-black/80 transition-colors">
                   <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                   Fotos ({galeria.length})
@@ -353,75 +355,124 @@ export default function ImovelPage() {
       <FloatButtons />
 
       {/* ═══════════════════════════════════════════════════
-          LIGHTBOX — renderizado fora do fluxo normal
-          usando portal via div fixo com z-[9999]
+          GALERIA ESTILO JETIMOB
+          Modo 1: Grid vertical (todas as fotos)
+          Modo 2: Slideshow (foto individual)
       ═══════════════════════════════════════════════════ */}
       {lightboxIdx !== null && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0, left: 0, right: 0, bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.97)',
-            zIndex: 9999,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-          onClick={() => setLightboxIdx(null)}
-        >
-          {/* Header */}
-          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'16px 24px',flexShrink:0}}
-            onClick={e => e.stopPropagation()}>
-            <div style={{color:'rgba(255,255,255,0.6)',fontSize:'13px'}}>{imovel.titulo}</div>
-            <div style={{display:'flex',alignItems:'center',gap:'16px'}}>
-              <span style={{color:'rgba(255,255,255,0.4)',fontSize:'13px'}}>{lightboxIdx+1} / {galeria.length}</span>
+        <div style={{position:'fixed',top:0,left:0,right:0,bottom:0,backgroundColor:'#111',zIndex:9999,display:'flex',flexDirection:'column'}}>
+
+          {/* ── HEADER ── */}
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'14px 20px',background:'#1a1a1a',flexShrink:0,borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
+            <div style={{display:'flex',alignItems:'center',gap:'12px'}}>
+              <button
+                onClick={() => setLightboxIdx(-1)}
+                style={{
+                  display:'flex',alignItems:'center',gap:'6px',
+                  color: lightboxIdx === -1 ? '#B8892A' : 'rgba(255,255,255,0.5)',
+                  background:'none',border:'none',cursor:'pointer',fontSize:'12px',fontWeight:600,
+                  borderBottom: lightboxIdx === -1 ? '2px solid #B8892A' : '2px solid transparent',
+                  paddingBottom:'2px',
+                }}>
+                ⊞ Todas as fotos ({galeria.length})
+              </button>
+              {lightboxIdx >= 0 && (
+                <span style={{color:'rgba(255,255,255,0.3)',fontSize:'12px'}}>
+                  / Foto {lightboxIdx + 1} de {galeria.length}
+                </span>
+              )}
+            </div>
+            <div style={{display:'flex',alignItems:'center',gap:'12px'}}>
+              <span style={{color:'rgba(255,255,255,0.4)',fontSize:'12px'}}>{imovel.titulo}</span>
               <button onClick={() => setLightboxIdx(null)}
-                style={{color:'rgba(255,255,255,0.5)',fontSize:'24px',background:'none',border:'none',cursor:'pointer',lineHeight:1}}>✕</button>
+                style={{color:'rgba(255,255,255,0.5)',fontSize:'22px',background:'none',border:'none',cursor:'pointer',lineHeight:1,padding:'4px'}}>✕</button>
             </div>
           </div>
 
-          {/* Foto */}
-          <div style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',position:'relative',padding:'0 60px'}}
-            onClick={e => e.stopPropagation()}>
-            <button
-              onClick={() => setLightboxIdx(i => i!==null ? Math.max(0,i-1) : null)}
-              disabled={lightboxIdx === 0}
-              style={{position:'absolute',left:'8px',top:'50%',transform:'translateY(-50%)',width:'44px',height:'44px',borderRadius:'50%',background:'rgba(255,255,255,0.15)',color:'white',fontSize:'24px',border:'none',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',opacity:lightboxIdx===0?0.2:1}}
-            >‹</button>
+          {/* ── MODO GRID (todas as fotos em scroll vertical) ── */}
+          {lightboxIdx === -1 && (
+            <div style={{flex:1,overflowY:'auto',padding:'16px'}}>
+              <div style={{columns:'2 300px',gap:'8px',maxWidth:'1200px',margin:'0 auto'}}>
+                {galeria.map((foto, i) => (
+                  <div key={i}
+                    onClick={() => setLightboxIdx(i)}
+                    style={{
+                      breakInside:'avoid',
+                      marginBottom:'8px',
+                      cursor:'pointer',
+                      borderRadius:'10px',
+                      overflow:'hidden',
+                      position:'relative',
+                    }}>
+                    <img src={foto} alt={`Foto ${i+1}`}
+                      style={{width:'100%',display:'block',transition:'transform 0.2s'}}
+                      onMouseOver={e => (e.target as any).style.transform='scale(1.02)'}
+                      onMouseOut={e => (e.target as any).style.transform='scale(1)'}
+                      onError={e => {(e.target as any).src=FOTOS_DEMO[i%FOTOS_DEMO.length]}}
+                    />
+                    <div style={{position:'absolute',bottom:'8px',right:'8px',background:'rgba(0,0,0,0.55)',color:'white',fontSize:'10px',fontWeight:600,padding:'3px 8px',borderRadius:'20px'}}>
+                      {i+1} / {galeria.length}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-            <img
-              key={lightboxIdx}
-              src={galeria[lightboxIdx]}
-              alt={`Foto ${lightboxIdx+1}`}
-              style={{maxWidth:'100%',maxHeight:'70vh',objectFit:'contain',borderRadius:'12px',boxShadow:'0 25px 60px rgba(0,0,0,0.5)'}}
-              onError={e => {(e.target as any).src=FOTOS_DEMO[0]}}
-            />
+          {/* ── MODO SLIDESHOW (foto individual) ── */}
+          {lightboxIdx >= 0 && (
+            <>
+              {/* Foto principal */}
+              <div style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',position:'relative',padding:'0 56px',overflow:'hidden'}}>
+                <button
+                  onClick={() => setLightboxIdx(i => i !== null && i > 0 ? i-1 : i)}
+                  disabled={lightboxIdx === 0}
+                  style={{position:'absolute',left:'8px',top:'50%',transform:'translateY(-50%)',width:'42px',height:'42px',borderRadius:'50%',background:'rgba(255,255,255,0.12)',color:'white',fontSize:'22px',border:'none',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',opacity:lightboxIdx===0?0.2:1,transition:'background 0.15s'}}
+                  onMouseOver={e=>(e.currentTarget.style.background='rgba(255,255,255,0.25)')}
+                  onMouseOut={e=>(e.currentTarget.style.background='rgba(255,255,255,0.12)')}
+                >‹</button>
 
-            <button
-              onClick={() => setLightboxIdx(i => i!==null ? Math.min(galeria.length-1,i+1) : null)}
-              disabled={lightboxIdx === galeria.length-1}
-              style={{position:'absolute',right:'8px',top:'50%',transform:'translateY(-50%)',width:'44px',height:'44px',borderRadius:'50%',background:'rgba(255,255,255,0.15)',color:'white',fontSize:'24px',border:'none',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',opacity:lightboxIdx===galeria.length-1?0.2:1}}
-            >›</button>
-          </div>
+                <img
+                  key={lightboxIdx}
+                  src={galeria[lightboxIdx]}
+                  alt={`Foto ${lightboxIdx+1}`}
+                  style={{maxWidth:'100%',maxHeight:'72vh',objectFit:'contain',borderRadius:'10px',boxShadow:'0 20px 60px rgba(0,0,0,0.6)'}}
+                  onError={e => {(e.target as any).src=FOTOS_DEMO[0]}}
+                />
 
-          {/* Thumbnails */}
-          <div style={{display:'flex',justifyContent:'center',gap:'8px',padding:'16px',flexShrink:0,overflowX:'auto'}}
-            onClick={e => e.stopPropagation()}>
-            {galeria.map((foto,i) => (
-              <img key={i} src={foto} alt={`Thumb ${i+1}`}
-                onClick={() => setLightboxIdx(i)}
-                style={{
-                  width:'56px', height:'44px', objectFit:'cover', borderRadius:'8px',
-                  cursor:'pointer', flexShrink:0,
-                  opacity: lightboxIdx===i ? 1 : 0.45,
-                  outline: lightboxIdx===i ? '2px solid #B8892A' : 'none',
-                  outlineOffset: '2px',
-                  transform: lightboxIdx===i ? 'scale(1.1)' : 'scale(1)',
-                  transition: 'all 0.15s',
-                }}
-                onError={e => {(e.target as any).src=FOTOS_DEMO[0]}}
-              />
-            ))}
-          </div>
+                <button
+                  onClick={() => setLightboxIdx(i => i !== null && i < galeria.length-1 ? i+1 : i)}
+                  disabled={lightboxIdx === galeria.length-1}
+                  style={{position:'absolute',right:'8px',top:'50%',transform:'translateY(-50%)',width:'42px',height:'42px',borderRadius:'50%',background:'rgba(255,255,255,0.12)',color:'white',fontSize:'22px',border:'none',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',opacity:lightboxIdx===galeria.length-1?0.2:1,transition:'background 0.15s'}}
+                  onMouseOver={e=>(e.currentTarget.style.background='rgba(255,255,255,0.25)')}
+                  onMouseOut={e=>(e.currentTarget.style.background='rgba(255,255,255,0.12)')}
+                >›</button>
+              </div>
+
+              {/* Thumbnails horizontais */}
+              <div style={{display:'flex',gap:'6px',padding:'12px 16px',background:'#1a1a1a',overflowX:'auto',flexShrink:0,borderTop:'1px solid rgba(255,255,255,0.08)'}}>
+                <button
+                  onClick={() => setLightboxIdx(-1)}
+                  style={{flexShrink:0,width:'48px',height:'38px',borderRadius:'6px',background:'rgba(184,137,42,0.2)',border:'1.5px solid #B8892A',color:'#B8892A',fontSize:'16px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}
+                  title="Ver todas">⊞</button>
+                {galeria.map((foto, i) => (
+                  <img key={i} src={foto} alt={`Thumb ${i+1}`}
+                    onClick={() => setLightboxIdx(i)}
+                    style={{
+                      width:'60px',height:'46px',objectFit:'cover',borderRadius:'6px',
+                      cursor:'pointer',flexShrink:0,
+                      opacity: lightboxIdx===i ? 1 : 0.4,
+                      outline: lightboxIdx===i ? '2px solid #B8892A' : 'none',
+                      outlineOffset: '2px',
+                      transform: lightboxIdx===i ? 'scale(1.08)' : 'scale(1)',
+                      transition: 'all 0.15s',
+                    }}
+                    onError={e => {(e.target as any).src=FOTOS_DEMO[i%FOTOS_DEMO.length]}}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       )}
     </>
