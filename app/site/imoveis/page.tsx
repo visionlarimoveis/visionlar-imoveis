@@ -444,8 +444,8 @@ export default function ImoveisHomePage() {
                 </>
               )}
               <div className="absolute top-4 right-4 z-10 bg-[#B8892A] text-white text-[10px] font-black px-3 py-1 rounded-full shadow">★ Destaque</div>
-              {/* Tagline — topo centralizado, longe do texto do imóvel que fica na base */}
-              <div className="absolute inset-x-0 top-6 z-10 flex justify-center px-16">
+              {/* Tagline — abaixo do badge Destaque, longe do texto do imóvel na base */}
+              <div className="absolute inset-x-0 top-12 z-10 flex justify-center px-16">
                 <p className="text-white font-bold text-base md:text-2xl italic text-center tracking-wide"
                   style={{fontFamily:'Playfair Display,serif', textShadow:'0 2px 12px rgba(0,0,0,0.95)', lineHeight:'1.3'}}>
                   "A visão certa para o seu novo lar."

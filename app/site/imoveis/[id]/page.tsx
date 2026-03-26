@@ -162,19 +162,19 @@ export default function ImovelPage() {
               <img src={galeria[0]} alt={imovel.titulo}
                 className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
                 onError={e => {(e.target as any).src=FOTOS_DEMO[0]}}/>
-              {/* Botões */}
-              <div className="absolute bottom-4 left-4 flex gap-2">
-                <button
-                  onClick={e => { e.stopPropagation(); setLightboxIdx(-1) }}
-                  className="bg-black/65 backdrop-blur-sm text-white text-xs font-semibold px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-black/80 transition-colors">
-                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                  Fotos ({galeria.length})
-                </button>
+              {/* Botões — empilhados verticalmente: Mapa em cima, Fotos embaixo */}
+              <div className="absolute bottom-4 left-4 flex flex-col gap-2">
                 <button
                   onClick={e => { e.stopPropagation(); setShowMapa(m => !m) }}
                   className="bg-black/65 backdrop-blur-sm text-white text-xs font-semibold px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-black/80 transition-colors">
                   <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                   <span>Mapa</span>
+                </button>
+                <button
+                  onClick={e => { e.stopPropagation(); setLightboxIdx(-1) }}
+                  className="bg-black/65 backdrop-blur-sm text-white text-xs font-semibold px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-black/80 transition-colors">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  Fotos ({galeria.length})
                 </button>
               </div>
             </div>
