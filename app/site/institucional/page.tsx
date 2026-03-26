@@ -125,7 +125,7 @@ export default async function InstitucionalPage() {
               </div>
               <h1 className="font-bold text-4xl md:text-5xl text-white mb-5 leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
                 Realizando sonhos<br />
-                <span className="text-[#D4A843]">um imóvel por vez</span>
+                <span className="text-[#D4A843]">a visão certa para seu novo lar</span>
               </h1>
               <p className="text-white/65 leading-relaxed text-base max-w-xl">
                 {cfg.sobre || 'A Visionlar Consultoria Imobiliária é uma empresa especializada em intermediação imobiliária, com foco em proporcionar uma experiência segura, transparente e eficiente para quem deseja comprar ou vender imóveis.'}
