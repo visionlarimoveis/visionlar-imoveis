@@ -444,10 +444,10 @@ export default function ImoveisHomePage() {
                 </>
               )}
               <div className="absolute top-4 right-4 z-10 bg-[#B8892A] text-white text-[10px] font-black px-3 py-1 rounded-full shadow">★ Destaque</div>
-              {/* Tagline centralizada no meio do banner */}
-              <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-10 flex justify-center px-20">
-                <p className="text-white font-bold text-2xl italic text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] tracking-wide"
-                  style={{fontFamily:'Playfair Display,serif', textShadow:'0 2px 12px rgba(0,0,0,0.9)'}}>
+              {/* Tagline — topo centralizado, longe do texto do imóvel que fica na base */}
+              <div className="absolute inset-x-0 top-6 z-10 flex justify-center px-16">
+                <p className="text-white font-bold text-base md:text-2xl italic text-center tracking-wide"
+                  style={{fontFamily:'Playfair Display,serif', textShadow:'0 2px 12px rgba(0,0,0,0.95)', lineHeight:'1.3'}}>
                   "A visão certa para o seu novo lar."
                 </p>
               </div>
@@ -498,7 +498,7 @@ export default function ImoveisHomePage() {
             </div>
           )}
           {/* FOOTER dentro do scroll */}
-          <footer className="bg-white border-t border-gray-200 py-4 px-6 flex items-center justify-between mt-auto">
+          <footer className="bg-white border-t border-gray-200 py-4 px-6 flex flex-col md:flex-row items-center gap-2 md:justify-between mt-auto">
             <span className="text-gray-400 text-[10px]">© {new Date().getFullYear()} Visionlar Consultoria Imobiliária — Corretor de Imóveis CRECI-RS {CRECI}</span>
             <span className="text-gray-400 text-[10px] italic font-medium text-center flex-1">&ldquo;Seu imóvel, nossa visão.&rdquo;</span>
             <a href="https://midiavision.com.br" target="_blank" rel="noopener" className="text-gray-300 hover:text-gray-500 text-[10px] transition-colors mr-14">Desenvolvido por MidiaVision Digital</a>

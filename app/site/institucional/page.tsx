@@ -342,7 +342,7 @@ export default async function InstitucionalPage() {
       </div>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-white border-t border-gray-200 py-4 px-6 flex items-center justify-between gap-4 mt-4">
+      <footer className="bg-white border-t border-gray-200 py-4 px-6 flex flex-col md:flex-row items-center gap-2 md:gap-4 md:justify-between mt-4">
         <span className="text-gray-400 text-[10px]">
           © {anoAtual} Visionlar Consultoria Imobiliária{cfg.creci ? ` — Corretor de Imóveis CRECI-RS ${cfg.creci}` : ''}
         </span>

@@ -173,8 +173,8 @@ export default function ImovelPage() {
                 <button
                   onClick={e => { e.stopPropagation(); setShowMapa(m => !m) }}
                   className="bg-black/65 backdrop-blur-sm text-white text-xs font-semibold px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-black/80 transition-colors">
-                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                  Mapa
+                  <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>Mapa</span>
                 </button>
               </div>
             </div>
@@ -258,13 +258,13 @@ export default function ImovelPage() {
               {imovel.comodidades?.length>0&&(
                 <div className="bg-white rounded-2xl p-5 mb-4 border border-gray-100 shadow-sm">
                   <h2 className="font-bold text-gray-900 mb-4">Comodidades do imóvel</h2>
-                  <div className="grid grid-cols-3 gap-y-2 gap-x-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-y-2 gap-x-4">
                     {imovel.comodidades.map((c:string)=>(
                       <div key={c} className="flex items-center gap-2 text-sm text-gray-700">
                         <div className="w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center shrink-0">
                           <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#059669" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                         </div>
-                        {c}
+                        <span className="leading-tight">{c}</span>
                       </div>
                     ))}
                   </div>
@@ -345,10 +345,10 @@ export default function ImovelPage() {
             </div>
           )}
         </div>
-        <footer className="bg-white border-t border-gray-200 mt-12 py-4 px-6 flex items-center justify-between">
-          <span className="text-gray-400 text-[10px]">© {new Date().getFullYear()} Visionlar Consultoria Imobiliária — Corretor de Imóveis CRECI-RS {CRECI}</span>
-          <span className="text-gray-400 text-[10px] italic font-medium text-center flex-1">&ldquo;Seu imóvel, nossa visão.&rdquo;</span>
-          <a href="https://midiavision.com.br" target="_blank" rel="noopener" className="text-gray-300 hover:text-gray-500 text-[10px] transition-colors mr-14">Desenvolvido por MidiaVision Digital</a>
+        <footer className="bg-white border-t border-gray-200 mt-12 py-4 px-6 flex flex-col md:flex-row items-center gap-2 md:justify-between">
+          <span className="text-gray-400 text-[10px] text-center md:text-left">© {new Date().getFullYear()} Visionlar Consultoria Imobiliária — Corretor de Imóveis CRECI-RS {CRECI}</span>
+          <span className="text-gray-400 text-[10px] italic font-medium text-center">&ldquo;Seu imóvel, nossa visão.&rdquo;</span>
+          <a href="https://midiavision.com.br" target="_blank" rel="noopener" className="text-gray-300 hover:text-gray-500 text-[10px] transition-colors md:mr-14 text-center">Desenvolvido por MidiaVision Digital</a>
         </footer>
 
       </div>

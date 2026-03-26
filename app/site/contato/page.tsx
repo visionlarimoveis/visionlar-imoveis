@@ -157,7 +157,7 @@ export default async function ContatoPage() {
         </div>
       </div>
 
-      <footer className="bg-white border-t border-gray-200 py-4 px-6 flex items-center justify-between gap-4 mt-8">
+      <footer className="bg-white border-t border-gray-200 py-4 px-6 flex flex-col md:flex-row items-center gap-2 md:gap-4 md:justify-between mt-8">
         <span className="text-gray-400 text-[10px]">© {anoAtual} Visionlar Consultoria Imobiliária{cfg.creci ? ` — Corretor de Imóveis CRECI-RS ${cfg.creci}` : ''}</span>
         <span className="text-gray-400 text-[10px] italic font-medium text-center flex-1">&ldquo;Seu imóvel, nossa visão.&rdquo;</span>
         <div className="flex items-center gap-3">
