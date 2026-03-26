@@ -94,7 +94,7 @@ export default async function InstitucionalPage() {
       <nav className="bg-[#0D2137] sticky top-0 z-50 shadow-lg" style={{ height: '64px', overflow: 'hidden' }}>
         <div className="h-full px-6 flex items-center justify-between">
           <Link href="/site/imoveis">
-            <Image src="/logo.png" alt="Visionlar Consultoria Imobiliária" width={130} height={44} className="object-contain" />
+            <Image src="/logo.png?v=2" alt="Visionlar Consultoria Imobiliária" width={130} height={44} className="object-contain" />
           </Link>
           <div className="hidden md:flex gap-1">
             {([['Imóveis', '/site/imoveis'], ['Institucional', '/site/institucional'], ['Contato', '/site/contato']] as [string, string][]).map(([l, h]) => (
@@ -151,8 +151,8 @@ export default async function InstitucionalPage() {
             </div>
             {/* Badge logo */}
             <div className="shrink-0 flex flex-col items-center gap-4">
-              <div className="bg-white rounded-2xl p-6 shadow-2xl text-center w-48">
-                <Image src="/logo.png" alt="Visionlar" width={120} height={44} className="object-contain mx-auto" />
+              <div className="bg-[#0D2137] rounded-2xl p-6 shadow-2xl text-center w-48">
+                <Image src="/logo.png?v=2" alt="Visionlar" width={150} height={55} className="object-contain mx-auto" />
               </div>
             </div>
           </div>

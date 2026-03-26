@@ -37,7 +37,7 @@ function Nav() {
     <nav className="bg-[#0D2137] sticky top-0 z-50 shadow-lg" style={{ height: "64px", overflow: "hidden" }}>
       <div className="h-full px-6 flex items-center justify-between">
         <Link href="/site/imoveis" className="flex items-center">
-          <Image src="/logo.png" alt="Visionlar Consultoria Imobiliária" width={130} height={44} className="object-contain"  />
+          <Image src="/logo.png?v=2" alt="Visionlar Consultoria Imobiliária" width={130} height={44} className="object-contain"  />
         </Link>
         <div className="hidden md:flex gap-1">
           {[['Imóveis','/site/imoveis'],['Institucional','/site/institucional'],['Contato','/site/contato']].map(([l,h])=>(
