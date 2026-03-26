@@ -181,7 +181,7 @@ export default function ImovelPage() {
             {/* 3 fotos pequenas */}
             {[1,2,3].map(i => (
               <div key={i} className="relative overflow-hidden cursor-pointer group bg-gray-200"
-                onClick={() => openLightbox(i)}>
+                onClick={() => i===3 && galeria.length>4 ? setLightboxIdx(-1) : openLightbox(i)}>
                 <img src={galeria[i]||FOTOS_DEMO[i]} alt={`Foto ${i+1}`}
                   className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
                   onError={e => {(e.target as any).src=FOTOS_DEMO[i%FOTOS_DEMO.length]}}/>
