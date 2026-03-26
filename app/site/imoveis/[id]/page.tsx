@@ -345,6 +345,7 @@ export default function ImovelPage() {
         </div>
         <footer className="bg-white border-t border-gray-200 mt-12 py-4 px-6 flex items-center justify-between">
           <span className="text-gray-400 text-[10px]">© {new Date().getFullYear()} Visionlar Consultoria Imobiliária — Corretor de Imóveis CRECI-RS {CRECI}</span>
+          <span className="text-gray-400 text-[10px] italic font-medium text-center flex-1">&ldquo;Seu imóvel, nossa visão.&rdquo;</span>
           <a href="https://midiavision.com.br" target="_blank" rel="noopener" className="text-gray-300 hover:text-gray-500 text-[10px] transition-colors mr-14">Desenvolvido por MidiaVision Digital</a>
         </footer>
 

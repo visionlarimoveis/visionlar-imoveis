@@ -157,8 +157,9 @@ export default async function ContatoPage() {
         </div>
       </div>
 
-      <footer className="bg-white border-t border-gray-200 py-4 px-6 flex items-center justify-between mt-8">
+      <footer className="bg-white border-t border-gray-200 py-4 px-6 flex items-center justify-between gap-4 mt-8">
         <span className="text-gray-400 text-[10px]">© {anoAtual} Visionlar Consultoria Imobiliária{cfg.creci ? ` — Corretor de Imóveis CRECI-RS ${cfg.creci}` : ''}</span>
+        <span className="text-gray-400 text-[10px] italic font-medium text-center flex-1">&ldquo;Seu imóvel, nossa visão.&rdquo;</span>
         <div className="flex items-center gap-3">
           <a href="https://midiavision.com.br" target="_blank" rel="noopener" className="text-gray-300 hover:text-gray-500 text-[10px] transition-colors">Desenvolvido por MidiaVision Digital</a>
           <a href="/adm" className="text-gray-200 hover:text-gray-400 text-[10px] border border-gray-200 px-2.5 py-1 rounded-lg">🔐 Adm</a>
