@@ -151,8 +151,8 @@ export default async function InstitucionalPage() {
             </div>
             {/* Badge logo */}
             <div className="shrink-0 flex flex-col items-center gap-4">
-              <div className="bg-[#0D2137] rounded-2xl p-6 shadow-2xl text-center w-48">
-                <Image src="/logo.png?v=2" alt="Visionlar" width={150} height={55} className="object-contain mx-auto" />
+              <div className="bg-[#0D2137] rounded-2xl p-5 shadow-2xl text-center w-56">
+                <Image src="/logo.png?v=2" alt="Visionlar" width={200} height={75} className="object-contain mx-auto" />
               </div>
             </div>
           </div>
