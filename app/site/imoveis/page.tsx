@@ -444,8 +444,12 @@ export default function ImoveisHomePage() {
                 </>
               )}
               <div className="absolute top-4 right-4 z-10 bg-[#B8892A] text-white text-[10px] font-black px-3 py-1 rounded-full shadow">★ Destaque</div>
-              <div className="absolute top-4 left-4 z-10 bg-black/50 backdrop-blur-sm text-white text-xs font-semibold px-4 py-1.5 rounded-full tracking-wide italic">
-                "A visão certa para o seu novo lar."
+              {/* Tagline centralizada no meio do banner */}
+              <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-10 flex justify-center px-20">
+                <p className="text-white font-bold text-2xl italic text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] tracking-wide"
+                  style={{fontFamily:'Playfair Display,serif', textShadow:'0 2px 12px rgba(0,0,0,0.9)'}}>
+                  "A visão certa para o seu novo lar."
+                </p>
               </div>
             </div>
           )}
