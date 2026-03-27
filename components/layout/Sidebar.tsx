@@ -25,6 +25,7 @@ const navGroups = [
       { href: '/cidades', icon: '🏙️', label: 'Cidades' },
       { href: '/bairros', icon: '📍', label: 'Bairros' },
       { href: '/tipos', icon: '🏷️', label: 'Tipos de Imóvel' },
+      { href: '/comodidades', icon: '✅', label: 'Comodidades' },
       { href: '/corretores', icon: '🤝', label: 'Corretores' },
       { href: '/config', icon: '⚙️', label: 'Configurações' },
     ],

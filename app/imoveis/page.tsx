@@ -12,7 +12,7 @@ const emptyForm = {
   area:'', dorms:'', suites:'', banhs:'', vagas:'',
   condominio:'', descricao:'', foto_url:'', fotos:[] as string[],
   status:'Ativo' as any, destaque:false, corretor_id:'', mobiliado:'Não' as any,
-  latitude:'', longitude:'',
+  latitude:'', longitude:'', comodidades:[] as string[],
 }
 
 function fmtP(p:number,f:string){
@@ -196,6 +196,7 @@ export default function ImoveisPage() {
   const [bairros, setBairros] = useState<any[]>([])
   const [tipos, setTipos] = useState<any[]>([])
   const [corretores, setCorretores] = useState<any[]>([])
+  const [comodidadesOpcoes, setComodidadesOpcoes] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
   const [editId, setEditId] = useState<string|null>(null)
@@ -227,6 +228,7 @@ export default function ImoveisPage() {
     supabase.from('cidades').select('*').order('nome').then(r => setCidades(r.data || []))
     supabase.from('tipos_imovel').select('*').order('nome').then(r => setTipos(r.data || []))
     supabase.from('corretores').select('*').order('nome').then(r => setCorretores(r.data || []))
+    supabase.from('comodidades_opcoes').select('*').order('nome').then(r => setComodidadesOpcoes(r.data || []))
   }, [load])
 
   useEffect(() => {
@@ -258,6 +260,7 @@ export default function ImoveisPage() {
       suites: String(im.suites||''), banhs: String(im.banhs||''), vagas: String(im.vagas||''),
       condominio: String(im.condominio||''), descricao: im.descricao||'',
       foto_url: im.foto_url||'', fotos: im.fotos||[],
+      comodidades: im.comodidades||[],
       latitude: String(im.latitude||''), longitude: String(im.longitude||''), mobiliado: im.mobiliado||'Não',
       status: im.status||'Ativo', destaque: im.destaque||false, corretor_id: im.corretor_id||'',
     })
@@ -288,6 +291,7 @@ export default function ImoveisPage() {
       descricao: form.descricao||null, foto_url: fotoFinal,
       fotos: form.fotos, status: form.status, destaque: form.destaque,
       mobiliado: form.mobiliado||'Não',
+      comodidades: form.comodidades||[],
       latitude: form.latitude ? parseFloat(form.latitude) : null,
       longitude: form.longitude ? parseFloat(form.longitude) : null,
       corretor_id: form.corretor_id||null,
@@ -478,6 +482,32 @@ export default function ImoveisPage() {
               <div><label className="text-[11px] font-bold text-gray-700 block mb-1">Destaque?</label><select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 bg-white" value={form.destaque?'1':'0'} onChange={e => setForm(f => ({...f, destaque: e.target.value==='1'}))}><option value="0">Não</option><option value="1">Sim</option></select></div>
               <div><label className="text-[11px] font-bold text-gray-700 block mb-1">🛋️ Mobiliado</label><select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 bg-white" value={form.mobiliado} onChange={inp('mobiliado')}><option value="Não">Não mobiliado</option><option value="Semimobiliado">Semimobiliado</option><option value="Sim">Mobiliado</option></select></div>
               <div className="col-span-2"><label className="text-[11px] font-bold text-gray-700 block mb-1">Descrição</label><textarea className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-amber-500 resize-y min-h-[70px]" value={form.descricao} onChange={inp('descricao')}/></div>
+
+              {/* Comodidades */}
+              <div className="col-span-2">
+                <label className="text-[11px] font-bold text-gray-700 block mb-2">🏠 Comodidades</label>
+                {comodidadesOpcoes.length === 0 ? (
+                  <p className="text-xs text-gray-400">Nenhuma comodidade cadastrada. <a href="/comodidades" className="text-amber-600 underline">Cadastrar agora →</a></p>
+                ) : (
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {comodidadesOpcoes.map(c => (
+                      <label key={c.id} className="flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 rounded px-1.5 py-1">
+                        <input type="checkbox"
+                          checked={form.comodidades.includes(c.nome)}
+                          onChange={e => setForm(f => ({
+                            ...f,
+                            comodidades: e.target.checked
+                              ? [...f.comodidades, c.nome]
+                              : f.comodidades.filter(x => x !== c.nome)
+                          }))}
+                          className="w-3.5 h-3.5 accent-amber-500"
+                        />
+                        <span className="text-[10px] text-gray-600 leading-tight">{c.icone} {c.nome}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               {/* Upload de fotos */}
               <FotoUploader
