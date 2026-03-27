@@ -205,7 +205,7 @@ export default function ImovelPage() {
           )}
 
           {/* GRID 2 colunas */}
-          <div className="grid grid-cols-[1fr,340px] gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr,340px] gap-6">
             <div>
               {/* Header */}
               <div className="bg-white rounded-2xl p-5 mb-4 border border-gray-100 shadow-sm">
@@ -272,9 +272,9 @@ export default function ImovelPage() {
               )}
             </div>
 
-            {/* Coluna direita — sticky */}
-            <div className="space-y-4">
-              <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm sticky top-20">
+            {/* Coluna direita — sticky, tudo em um card só */}
+            <div>
+              <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm md:sticky md:top-20">
                 <h3 className="font-bold text-gray-900 mb-1 text-sm">Interessado neste imóvel?</h3>
                 <p className="text-xs text-gray-400 mb-4">Entre em contato pelo WhatsApp.</p>
                 <div className="bg-gray-50 rounded-xl p-3 mb-4 border border-gray-200">
@@ -286,6 +286,16 @@ export default function ImovelPage() {
                   <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 2C6.477 2 2 6.484 2 12.017c0 1.867.486 3.622 1.338 5.147L2 22l4.975-1.302A10 10 0 0012 22c5.523 0 10-4.487 10-10C22 6.48 17.522 2 12 2z"/></svg>
                   Enviar pelo WhatsApp
                 </a>
+
+                {/* Anuncie conosco — logo abaixo do WhatsApp */}
+                <div className="mt-3 bg-[#0D2137] rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+                  <div className="text-white/60 text-xs leading-tight">Tem um imóvel<br/>para vender?</div>
+                  <a href={`https://wa.me/${WPP}?text=${encodeURIComponent('Olá! Gostaria de anunciar meu imóvel com a Visionlar Consultoria Imobiliária.')}`} target="_blank" rel="noopener"
+                    className="bg-[#B8892A] text-[#0D2137] text-xs font-bold px-4 py-2 rounded-lg hover:bg-[#D4A843] shrink-0 whitespace-nowrap">
+                    Anuncie conosco
+                  </a>
+                </div>
+
                 {imovel.corretor&&(
                   <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-[#0D2137] text-white flex items-center justify-center font-bold text-sm shrink-0">
@@ -304,11 +314,6 @@ export default function ImovelPage() {
                     )}
                   </div>
                 )}
-              </div>
-              <div className="bg-[#0D2137] rounded-2xl p-4 text-center">
-                <div className="text-white/60 text-xs mb-2">Tem um imóvel para vender?</div>
-                <a href={`https://wa.me/${WPP}?text=${encodeURIComponent('Olá! Gostaria de anunciar meu imóvel com a Visionlar Consultoria Imobiliária.')}`} target="_blank" rel="noopener"
-                  className="inline-block bg-[#B8892A] text-[#0D2137] text-xs font-bold px-4 py-2 rounded-lg hover:bg-[#D4A843]">Anuncie conosco</a>
               </div>
             </div>
           </div>
